@@ -1,0 +1,32 @@
+<% i = 0 %>
+<h2>Avionics Matcher</h2>
+<div class="row">
+    <div class="col">
+      <h4>Given Title: <%= @amr.given_name %></h4>
+    </div>
+</div>
+<div class="row">
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Matched Name</th>
+                <th scope="col">Avionic Type</th>
+                <th scope="col">Manufacturer</th>
+                <th scope="col">Device</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% @amr.nontrivial_candidates.each do |candidate_name, candidate_data| %>
+                <% i += 1%>
+                <tr>
+                    <th scope="row"><a href="/vote_amr/<%= @amr.id %>/<%= i-1 %>"><%= i %></a></th>
+                    <td><a href="/vote_amr/<%= @amr.id %>/<%= i-1 %>"><%= candidate_name %></a></td>
+                    <td><a href="/vote_amr/<%= @amr.id %>/<%= i-1 %>"><%= candidate_data["avionic_type"]%></a></td>
+                    <td><a href="/vote_amr/<%= @amr.id %>/<%= i-1 %>"><%= candidate_data["manufacturer"]%></a></td>
+                    <td><a href="/vote_amr/<%= @amr.id %>/<%= i-1 %>"><%= candidate_data["device"]%></a></td>
+                </tr>
+            <% end %>
+        </tbody>
+    </table>
+</div>

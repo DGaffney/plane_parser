@@ -1,0 +1,10 @@
+development:
+  clients:
+    default:
+      database: pocket_news
+      options:
+        connect_timeout: 15
+        wait_queue_timeout: 15
+        max_pool_size: 20
+      hosts:
+        - localhost:27017
