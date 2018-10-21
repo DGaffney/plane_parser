@@ -1,7 +1,7 @@
 development:
   clients:
     default:
-      database: pocket_news
+      database: plane_parser
       options:
         connect_timeout: 15
         wait_queue_timeout: 15
