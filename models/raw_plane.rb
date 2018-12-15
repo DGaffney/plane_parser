@@ -28,7 +28,13 @@ class RawPlane
   field :useful_load
   field :prop_2_time
   field :fractional_ownership
+  field :delisted
   
+  def plane_online?
+    page_data = Nokogiri.parse(RestClient::Request.execute(:url => "https://trade-a-plane.com"+self.link, :method => :get, :verify_ssl => false));false
+    page_data.search("title").text.include?(self.listing_id)
+  end
+
   def imputed_record
     similar_planes = self.similar_planes.to_a
     self.to_hash.merge(Hash[self.empty_fields.collect do |field|
