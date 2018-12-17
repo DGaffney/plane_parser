@@ -1,3 +1,4 @@
+load 'environment.rb'
 task :collector do
   while true
     CollectPlanes.kickoff
@@ -7,7 +8,7 @@ end
 task :delister do
   while true
     begin
-      RawPlane.where(delisted: nil).collect{|x| print(".");x.delisted = !x.plane_online?;x.save!;}
+      RawPlane.where(:delisted.in => [false, nil]).collect{|x| print(".");x.delisted = !x.plane_online?;x.save!;}
     rescue
       retry
     end
