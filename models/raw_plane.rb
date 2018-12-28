@@ -105,7 +105,7 @@ class RawPlane
   end
   
   def imputed_avionics
-    self.avionics_package.collect{|av| [av, AvionicsMatchRecord.where(given_name: av).first.likeliest_choice]}.select{|k,v| v.last > 0.5}.collect{|k,x| [x[0][1]["avionic_type"], x[0][1]["manufacturer"], x[0][1]["device"]]}
+    self.avionics_package.collect{|av| GenerateAvionicsMatchRecord.new.perform(av) if AvionicsMatchRecord.where(given_name: av).first.nil? ; [av, AvionicsMatchRecord.where(given_name: av).first.likeliest_choice]}.select{|k,v| v.last > 0.5}.collect{|k,x| [x[0][1]["avionic_type"], x[0][1]["manufacturer"], x[0][1]["device"]]}
   end
   
   def imputed_results
