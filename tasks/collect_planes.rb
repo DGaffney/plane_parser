@@ -7,7 +7,7 @@ class CollectPlanes
     end
   end
   def hostname
-    "https://www.trade-a-plane.com"
+    "http://www.trade-a-plane.com"
   end
 
   def page_path(page=1)
@@ -16,11 +16,11 @@ class CollectPlanes
 
   def perform(page)
     puts page
-    page_data = Nokogiri.parse(RestClient.get(hostname+page_path(page)));false
+    page_data = Nokogiri.parse(RestClient::Request.execute(:url => hostname+page_path(page), :method => :get, :verify_ssl => false));false
     page_data.search(".result").map do |aircraft_listing|
       aircraft_link = aircraft_listing.search(".img_area a").collect{|l| l.attributes["href"].value}.first
       puts "\t"+aircraft_link
-      aircraft = parse_aircraft(aircraft_listing, Nokogiri.parse(RestClient.get(hostname+aircraft_link))).merge(link: aircraft_link, listing_id: listing_id(aircraft_link), category_level: category_level(aircraft_link))
+      aircraft = parse_aircraft(aircraft_listing, Nokogiri.parse(RestClient::Request.execute(:url => hostname+aircraft_link, :method => :get, :verify_ssl => false))).merge(link: aircraft_link, listing_id: listing_id(aircraft_link), category_level: category_level(aircraft_link))
       aircraft[:avionics_package].first.split(", ").collect(&:strip).reject{|x| x.downcase.include?("avionics")}.collect{|x| x.split("(")[0]}.reject{|x| x.nil? || x.empty?} if aircraft[:avionics_package].length == 1
       if RawPlane.where(listing_id: aircraft[:listing_id]).first.nil?
         rp = RawPlane.new(aircraft)
