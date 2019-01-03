@@ -13,6 +13,7 @@ require 'dgaff'
 require 'diff/lcs'
 require 'jaro_winkler'
 Mongoid.load!("mongoid.yml", :development)
+SETTINGS=JSON.parse(File.read("settings.json"))
 $redis = Redis.new
 Dir[File.dirname(__FILE__) + '/handlers/*.rb'].each {|file| require file }
 Dir[File.dirname(__FILE__) + '/extensions/*.rb'].each {|file| require file }

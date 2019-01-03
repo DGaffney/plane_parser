@@ -1,5 +1,6 @@
 class RawPlane
   include Mongoid::Document
+  field :deal_tweeted, type: Boolean, default: false
   field :last_updated, type: Time
   field :region
   field :locality
