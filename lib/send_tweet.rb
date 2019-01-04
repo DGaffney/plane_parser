@@ -6,6 +6,7 @@ class Tweeter
       f = File.open(plane.id.to_s+".json", "w")
       f.write({tweet: self.tweet_text(plane, savings), username: SETTINGS["twitter_user"], password: SETTINGS["twitter_password"]}.to_json)
       f.close
+      puts "python scripts/tweet.py #{plane.id.to_s}.json"
       `python scripts/tweet.py #{plane.id.to_s}.json`
       `rm #{plane.id.to_s}.json`
       `pkill chrome`
