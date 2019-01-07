@@ -14,4 +14,6 @@ task :delister do
     end
   end
 end
-
+task :tweeter do
+  Tweeter.run
+end
