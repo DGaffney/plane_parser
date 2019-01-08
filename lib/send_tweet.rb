@@ -9,7 +9,7 @@ class Tweeter
         results = JSON.parse(`python scripts/tweet.py #{plane.id.to_s}.json`) rescue nil
         `rm #{plane.id.to_s}.json`
         `pkill chrome`
-        if results
+        if !results.nil?
           plane.deal_tweeted = true
           plane.save!
         end
