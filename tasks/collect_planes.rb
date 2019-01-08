@@ -37,6 +37,7 @@ class CollectPlanes
         plane.save!
       end
     end
+    sleep(10)
   end
 
   def listing_id(aircraft_link)
