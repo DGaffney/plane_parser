@@ -1,6 +1,4 @@
-
 class Tweeter
-  
   def self.run
     while true
       self.identify_deals.each do |plane, savings|
@@ -11,6 +9,8 @@ class Tweeter
         `python scripts/tweet.py #{plane.id.to_s}.json`
         `rm #{plane.id.to_s}.json`
         `pkill chrome`
+        plane.deal_tweeted = true
+        plane.save!
       end
       sleep(60*60)
     end
@@ -22,8 +22,9 @@ class Tweeter
   end
   
   def self.identify_deals
-    plane_ids = RawPlane.where(:delisted.ne => true, :deal_tweeted.ne => true, :last_updated.gte => Time.now-60*60*24*30, category_level: "Single+Engine+Piston", :image_count.gte => 2, :price.ne => 0).collect(&:id)
+    categories = ["Piston+Helicopters", "Turboprop", "Single+Engine+Piston", "Multi+Engine+Piston", "Ultralight", "Rotary+Wing", "Gliders+%7C+Sailplanes"]
+    plane_ids = RawPlane.where(:delisted.ne => true, :deal_tweeted.ne => true, :last_updated.gte => Time.now-60*60*24*30, :category_level.in => categories, :image_count.gte => 2, :price.ne => 0).collect(&:id)
     predicted_prices = Hash[RawPlaneObservation.where(:raw_plane_id.in => plane_ids).collect{|x| [x.raw_plane_id, x.predict_price]}]
-    plane_ids.select{|x| !predicted_prices[x].nil?}.collect{|x| [RawPlane.find(x), RawPlane.find(x).price-predicted_prices[x]]}.sort_by(&:last).select{|x| x.last.abs/x.first.price < 0.50 && x.first.price < 45000 && x.last < -1000}
+    plane_ids.collect{|x| [RawPlane.find(x), RawPlane.find(x).price.to_f-predicted_prices[x].to_f]}.sort_by(&:last).select{|x| x.last.abs/x.first.price < 0.50 && x.last.abs/x.first.price > 0.05 && x.first.price < 300000 && x.last < 0}
   end
 end
