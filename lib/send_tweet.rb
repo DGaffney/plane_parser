@@ -7,6 +7,7 @@ class Tweeter
         f.close
         puts "python scripts/tweet.py #{plane.id.to_s}.json"
         results = JSON.parse(`python scripts/tweet.py #{plane.id.to_s}.json`) rescue nil
+        puts results
         `rm #{plane.id.to_s}.json`
         `pkill chrome`
         if !results.nil?
