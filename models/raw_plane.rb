@@ -30,6 +30,7 @@ class RawPlane
   field :prop_2_time
   field :fractional_ownership
   field :delisted
+  field :latest_certficate_reissue_date
   
   def plane_online?
     page_data = Nokogiri.parse(RestClient::Request.execute(:url => "https://trade-a-plane.com"+self.link, :method => :get, :verify_ssl => false));false
