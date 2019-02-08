@@ -39,11 +39,17 @@ class RawPlane
 
   def imputed_record
     similar_planes = self.similar_planes.to_a
-    self.to_hash.merge(Hash[self.empty_fields.collect do |field|
+    record = self.to_hash.merge(Hash[self.empty_fields.collect do |field|
       [field, determine_likeliest_value(field, similar_planes.collect{|x| x.send(field)})]
     end].merge(similar_price: similar_planes.collect(&:price).collect(&:to_i).reject(&:zero?).average))
+    record["appraisal_range"] = appraisal_range(record)
+    record
   end
   
+  def appraisal_range(imputed_record)
+    Appraiser.likely_appraisal_for_imputed_record(imputed_record)[-1]
+  end
+
   def to_hash
     Hash[self.fields.keys.collect{|f| [f, self.send(f)]}]
   end
