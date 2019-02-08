@@ -169,6 +169,8 @@ class RawPlane
       imputed_results["useful_load"].to_i,
       imputed_results["prop_2_time"].to_i, 
       imputed_results["similar_price"],
+      (imputed_results["appraisal_range"][0] rescue 0),
+      (imputed_results["appraisal_range"][1] rescue 0),
     ]}.merge(avionic_data: self.avionic_data(imputed_results, distinct_values), price: imputed_results["price"])
   end
 end
