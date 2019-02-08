@@ -1,30 +1,30 @@
 class Appraiser
   def self.appraisals
-    if @@appraisals
-      @@appraisals
+    if @appraisals
+      @appraisals
     else
-      @@appraisals ||= JSON.parse(File.read("appraisals.json"))
-      @@appraisals["Homebuilt Airplane"].each do |year, makes|
+      @appraisals ||= JSON.parse(File.read("appraisals.json"))
+      @appraisals["Homebuilt Airplane"].each do |year, makes|
         makes.each do |make, models|
           models.each do |model, prices|
-            @@appraisals["Airplanes"] ||= {}
-            @@appraisals["Airplanes"][year] ||= {}
-            @@appraisals["Airplanes"][year][make] ||= {}
-            @@appraisals["Airplanes"][year][make][model] ||= prices
+            @appraisals["Airplanes"] ||= {}
+            @appraisals["Airplanes"][year] ||= {}
+            @appraisals["Airplanes"][year][make] ||= {}
+            @appraisals["Airplanes"][year][make][model] ||= prices
           end
         end
       end
-      @@appraisals["Factory Airplane"].each do |year, makes|
+      @appraisals["Factory Airplane"].each do |year, makes|
         makes.each do |make, models|
           models.each do |model, prices|
-            @@appraisals["Airplanes"] ||= {}
-            @@appraisals["Airplanes"][year] ||= {}
-            @@appraisals["Airplanes"][year][make] ||= {}
-            @@appraisals["Airplanes"][year][make][model] ||= prices
+            @appraisals["Airplanes"] ||= {}
+            @appraisals["Airplanes"][year] ||= {}
+            @appraisals["Airplanes"][year][make] ||= {}
+            @appraisals["Airplanes"][year][make][model] ||= prices
           end
         end
       end
-      @@appraisals
+      @appraisals
     end
   end
 
