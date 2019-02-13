@@ -31,7 +31,10 @@ class RawPlane
   field :fractional_ownership
   field :delisted
   field :latest_certficate_reissue_date
-  
+  def predicted_price
+    RawPlaneObservation.where(raw_plane_id: self.id).first.predict_price
+  end  
+
   def plane_online?
     page_data = Nokogiri.parse(RestClient::Request.execute(:url => "https://trade-a-plane.com"+self.link, :method => :get, :verify_ssl => false));false
     page_data.search("title").text.include?(self.listing_id)
