@@ -31,7 +31,16 @@ class RawPlane
   field :fractional_ownership
   field :delisted
   field :latest_certficate_reissue_date
-  
+  def self.get_predictions(filename="plane_preds2.csv")
+    csv = CSV.open(filename, "w")
+    RawPlane.where(:price.ne => 0).all.to_a.shuffle.collect{|rp| csv << [rp.make, rp.model, rp.category_level, rp.price, rp.predicted_price]}
+    csv.close
+  end
+
+  def predicted_price
+    RawPlaneObservation.where(raw_plane_id: self.id).first.predict_price rescue nil
+  end
+
   def plane_online?
     page_data = Nokogiri.parse(RestClient::Request.execute(:url => "https://trade-a-plane.com"+self.link, :method => :get, :verify_ssl => false));false
     page_data.search("title").text.include?(self.listing_id)

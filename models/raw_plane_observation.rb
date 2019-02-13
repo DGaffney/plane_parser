@@ -42,11 +42,15 @@ class RawPlaneObservation#.train_model
     out_rows
   end
 
-  def self.get_model_data(avionic_type_keys, manufacturer_keys, device_keys, planes=RawPlaneObservation.all.to_a, include_avionics=true)
+  def self.get_model_data(avionic_type_keys, manufacturer_keys, device_keys, planes=RawPlaneObservation.all.to_a, include_appraisal=false, include_avionics=true)
     dataset = []
     prices = []
     planes.each do |plane|
       row = plane.base_record.dup.collect(&:to_f).collect{|x| x.nan? ? 0 : x}
+      if !include_appraisal
+        row[21] = 0
+        row[22] = 0
+      end
       if include_avionics
         avionic_type_keys.each do |key|
           row << ((plane.avionic_data[0][key]||0) rescue 0)
@@ -64,13 +68,15 @@ class RawPlaneObservation#.train_model
     return dataset, prices
   end
 
-  def self.train_model(include_avionics=true)
+  def self.train_model(include_appraisal=false, include_avionics=true)
     all_planes = RawPlaneObservation.where(:raw_plane_id.in => RawPlane.where(:category_level => "Single+Engine+Piston", :price.lte => 150000).collect(&:id), :price.ne => 0).all.to_a.shuffle#.select{|rp| rp.year.to_i != 0 && rp.year < 1985}.collect(&:id), :price.ne => 0).all.to_a.shuffle
+    all_planes = RawPlaneObservation.where(:raw_plane_id.in => RawPlane.all.collect(&:id), :price.ne => 0).all.to_a.shuffle#.select{|rp| rp.year.to_i != 0 && rp.year < 1985}.collect(&:id), :price.ne => 0).all.to_a.shuffle
+    binding.pry
     avionic_types, manufacturers, devices = all_planes.collect(&:avionic_data).reject(&:empty?).transpose
     avionic_type_keys = self.merge_hashes(avionic_types).keys
     manufacturer_keys = self.merge_hashes(manufacturers).keys
     device_keys = self.merge_hashes(devices).keys
-    x, y = self.get_model_data(avionic_type_keys, manufacturer_keys, device_keys, all_planes)
+    x, y = self.get_model_data(avionic_type_keys, manufacturer_keys, device_keys, all_planes, include_appraisal)
     x_train, x_test, y_train, y_test  = train_test_split(x,y, test_size: 0.2, random_state: Time.now.to_i)
     x_train, y_train = self.bootstrap([x_train, y_train.collect{|yt| yt+(rand-0.5)*yt*0.1}].transpose, 8000).transpose;false
     model = RandomForestRegressor.new(n_estimators=50)
@@ -83,7 +89,7 @@ class RawPlaneObservation#.train_model
     puts model.score(x_test, y_test.collect{|v| Math.log(v)})
     model.fit(x, y)
     pickled = pickle.dumps(model);false
-    f = File.open("raw_plane_observation_model.pkl", "w")
+    f = File.open("raw_plane_observation_model#{include_appraisal ? "_full" : "_no_appraisal"}.pkl", "w")
     f.write(pickled)
     f.close
     f = File.open("raw_plane_observation_avionic_keys.json", "w")
@@ -92,17 +98,17 @@ class RawPlaneObservation#.train_model
     return model
   end
 
-  def self.get_model
-    @@current_raw_plane_observation_model ||= pickle.loads(open("raw_plane_observation_model.pkl").read)
+  def self.get_model(include_appraisal=false)
+    @@current_raw_plane_observation_model ||= pickle.loads(open("raw_plane_observation_model#{include_appraisal ? "_full" : "_no_appraisal"}.pkl").read)
   end
 
   def self.stored_avionics_keys
     @@stored_avionic_key_data ||= JSON.parse(File.read("raw_plane_observation_avionic_keys.json"))
   end
 
-  def predict_price
+  def predict_price(include_appraisal=false)
     avionic_type_keys, manufacturer_keys, device_keys = RawPlaneObservation.stored_avionics_keys
-    RawPlaneObservation.predict(RawPlaneObservation.get_model_data(avionic_type_keys, manufacturer_keys, device_keys, [self])[0])
+    RawPlaneObservation.predict(RawPlaneObservation.get_model_data(avionic_type_keys, manufacturer_keys, device_keys, [self], include_appraisal)[0])
   end
   
   def self.predict(data)
