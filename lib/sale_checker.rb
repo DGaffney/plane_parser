@@ -42,11 +42,16 @@ class SaleChecker
     days_between_cert = day_width_plane_cert(raw_plane, reg_results)
     days_between_cert && days_between_cert > -30 && days_between_cert < 200
   end
-  
-  def check_plane_registry
-    RawPlane.where(latest_certficate_reissue_date: nil).to_a.shuffle.each do |raw_plane|
-      raw_plane.latest_certficate_reissue_date = (check_reg_number(raw_plane) rescue nil)
-      raw_plane.save!
-    end
+
+  def planes_to_check
+    RawPlane.where(latest_certficate_reissue_date: nil).to_a.shuffle.collect(&:id)
+  end
+
+  def check_plane_registry(raw_plane_id)
+    raw_plane = RawPlane.find(raw_plane_id)
+    updates = (check_reg_number(raw_plane) rescue nil)
+    return nil if updates.nil?
+    raw_plane.latest_certficate_reissue_date = updates
+    raw_plane.save!
   end
 end
