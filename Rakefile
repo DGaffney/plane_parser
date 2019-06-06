@@ -8,7 +8,7 @@ end
 task :delister do
   while true
     begin
-      RawPlane.where(:delisted.in => [false, nil]).collect{|x| print(".");x.delisted = !x.plane_online?;x.save!;}
+      RawPlane.where(:delisted.in => [false, nil]).collect{|x| print(".");x.delisted = !x.plane_online?;x.save!;sleep(10)}
     rescue
       retry
     end

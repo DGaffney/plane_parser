@@ -62,7 +62,7 @@ class CollectPlanes
       reg_number: aircraft_page.search("div#main_info li")[3].text.gsub("Registration #: ", "").strip,
       serial_no: aircraft_page.search("div#main_info li")[4].text.gsub("Serial #: ", "").strip,
       location: aircraft_page.search("div#main_info li")[5].text.gsub("Location: ", "").gsub(/\W/, " ").gsub(/\ +/, " ").strip,
-      avionics_package: aircraft_page.search("div#avionics_equipment pre").text.split("\r\n").collect(&:strip).reject{|x| x.downcase.include?("avionics")}.collect{|x| x.split("(")[0]}.reject{|x| x.nil? || x.empty?},
+      avionics_package: aircraft_page.search("div#avionics_equipment pre").text.split(/[(\r\n)\n,.;]/).collect{|x| x.split(" - ")}.flatten.collect(&:strip).reject{|x| x.downcase.include?("avionics")}.collect{|x| x.split("(")[0]}.reject{|x| x.nil? || x.empty?},
       image_count: aircraft_page.search("div#photos li").count,
     }.merge(Hash[aircraft_page.search("div#general_specs p").collect{|x| k,v = x.text.gsub(" ", "_").downcase.split(":");[k.gsub("#", "num").to_sym, v]}]) 
   end
