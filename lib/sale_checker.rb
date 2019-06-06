@@ -44,7 +44,10 @@ class SaleChecker
   end
 
   def planes_to_check
-    RawPlane.where(latest_certficate_reissue_date: nil).to_a.shuffle.collect(&:id)
+    fully_empty_cases = RawPlane.where(latest_certficate_reissue_date: nil).to_a.shuffle.collect(&:id)
+    partially_empty_cases = RawPlane.where("latest_certficate_reissue_date.last_certificate_date": nil).to_a.shuffle.collect(&:id)-fully_empty_cases
+    sales_previous_to_listing = RawPlane.where(:latest_certficate_reissue_date.ne => nil).select{|x| !x.latest_certficate_reissue_date["last_certificate_date"].nil? && (x.last_updated||x.id.generation_time) > x.latest_certficate_reissue_date["last_certificate_date"]}.collect(&:id)-(fully_empty_cases|partially_empty_cases)
+    fully_empty_cases | partially_empty_cases | sales_previous_to_listing
   end
 
   def check_plane_registry(raw_plane_id)
