@@ -1,5 +1,6 @@
 class RawPlane
   include Mongoid::Document
+  field :created_at, type: Time
   field :deal_tweeted, type: Boolean, default: false
   field :last_updated, type: Time
   field :region
@@ -158,9 +159,9 @@ class RawPlane
 
   def self.transform_to_row(imputed_results, distinct_values)
     {base_record: [
-      imputed_results["last_updated"].strftime("%Y").to_i,
-      imputed_results["last_updated"].strftime("%m").to_i,
-      imputed_results["last_updated"].strftime("%w").to_i,
+      (imputed_results["last_updated"]||Time.now).strftime("%Y").to_i,
+      (imputed_results["last_updated"]||Time.now).strftime("%m").to_i,
+      (imputed_results["last_updated"]||Time.now).strftime("%w").to_i,
       distinct_values[:region].index(imputed_results["region"])||-1,
       distinct_values[:category_level].index(imputed_results["category_level"])||-1,
       distinct_values[:make].index(imputed_results["make"])||-1,

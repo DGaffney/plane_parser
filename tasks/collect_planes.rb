@@ -27,7 +27,6 @@ class CollectPlanes
         #https://github.com/pastpages/archiveis
         rp.archived_link = `archiveis "#{aircraft_link}"`.strip
         rp.save!
-        r
         GenerateRawPlaneObservation.perform_async(rp.id)
         (aircraft[:avionics_package]||[]).each do |avionic|
           GenerateAvionicsMatchRecord.perform_async(avionic)
@@ -54,6 +53,7 @@ class CollectPlanes
   def parse_aircraft(aircraft_listing, aircraft_page)
     month, day, year = aircraft_listing.search("p.last-update").text.split(": ")[-1].split("/") rescue [nil,nil,nil]
     {
+      created_at: Time.now,
       last_updated: (Time.parse("#{day}/#{month}/#{year}") rescue nil),
       region: (aircraft_listing.search("p.address span").select{|x| x["itemprop"] == "addressRegion"}.first.text rescue nil),
       locality: (aircraft_listing.search("p.address span").select{|x| x["itemprop"] == "addresslocality"}.first.text rescue nil),

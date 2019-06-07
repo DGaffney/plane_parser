@@ -1,4 +1,5 @@
 require 'pry'
+require 'twitter'
 require 'pycall/import'
 include PyCall::Import
 require 'sinatra'
