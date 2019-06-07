@@ -24,7 +24,10 @@ class CollectPlanes
       aircraft[:avionics_package].first.split(", ").collect(&:strip).reject{|x| x.downcase.include?("avionics")}.collect{|x| x.split("(")[0]}.reject{|x| x.nil? || x.empty?} if aircraft[:avionics_package].length == 1
       if RawPlane.where(listing_id: aircraft[:listing_id]).first.nil?
         rp = RawPlane.new(aircraft)
+        #https://github.com/pastpages/archiveis
+        rp.archived_link = `archiveis "#{aircraft_link}"`.strip
         rp.save!
+        r
         GenerateRawPlaneObservation.perform_async(rp.id)
         (aircraft[:avionics_package]||[]).each do |avionic|
           GenerateAvionicsMatchRecord.perform_async(avionic)

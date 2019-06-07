@@ -17,6 +17,7 @@ class RawPlane
   field :condition
   field :flight_rules
   field :link
+  field :archived_link
   field :listing_id
   field :category_level
   field :total_time, type: Float
