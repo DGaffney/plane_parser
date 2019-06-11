@@ -116,7 +116,7 @@ class RawPlane
     if ["price", "total_time", "num_seats", "engine_1_time", "prop_1_time", "engine_2_time", "prop_2_time", "year_painted", "interior_year", "useful_load"].include?(field)
       return values.compact.empty? ? 0 : values.compact.collect(&:to_i).average
     elsif field == "year"
-      return values.compact.empty? ? 0 : values.compact.reject(&:zero?).average
+      return values.compact.reject(&:zero?).empty? ? 0 : values.compact.reject(&:zero?).average
     else
       return values.compact.mode
     end
