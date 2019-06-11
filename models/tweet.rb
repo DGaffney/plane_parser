@@ -14,7 +14,7 @@ class Tweet
   end
 
   def self.generate_sold_posts
-    RawPlane.where(delisted: true, :archived_link.nin => ["", nil], :"latest_certficate_reissue_date.last_certificate_date".ne => nil).select{|x| t = (x.last_updated||x.id.generation_time); g = t-x.latest_certficate_reissue_date["last_certificate_date"]; g > 0 && g < 5*4*7*24*60*60}.each do |plane|
+    RawPlane.where(delisted: true, :archived_link.nin => ["", nil], :"latest_certficate_reissue_date.last_certificate_date".ne => nil).select{|x| t = (x.last_updated||x.id.generation_time); g = x.latest_certficate_reissue_date["last_certificate_date"]-t; g > 0 && g < 5*4*7*24*60*60}.each do |plane|
       if Tweet.where(raw_plane_id: plane.id, tweet_type: "sold").first.nil?
         t = Tweet.new(raw_plane_id: plane.id, tweet_type: "sold")
         loc = plane.location && !plane.location.empty? ? " in #{plane.location}" : ""
