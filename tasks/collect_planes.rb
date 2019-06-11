@@ -5,6 +5,7 @@ class CollectPlanes
     1.upto(300) do |page|
       CollectPlanes.perform_async(page)
     end
+    CheckRegistry.perform_in(60*60*6)
   end
   def hostname
     "http://www.trade-a-plane.com"
