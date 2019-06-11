@@ -24,7 +24,7 @@ class Tweet
         residual_pct = residual/plane.price.to_i
         next if residual_pct.abs > 0.40
         valuation_text = "#{residual > 0 ? "undervalued" : "overvalued"} by #{((residual_pct).round(2)*100).to_i}%"
-        t.tweet_text = "#{plane.year} #{plane.make.capitalize} #{plane.model.capitalize}#{loc} possibly sold - delisted and new registration -- archived listing: #{x.archived_link}. Was priced at $#{plane.price.to_i.to_s.reverse.gsub(/(\d{3})(?=\d)/, '\\1,').reverse} (#{valuation_text})"
+        t.tweet_text = "#{plane.year} #{plane.make.capitalize} #{plane.model.capitalize}#{loc} possibly sold - delisted and new registration -- archived listing: #{plane.archived_link}. Was priced at $#{plane.price.to_i.to_s.reverse.gsub(/(\d{3})(?=\d)/, '\\1,').reverse} (#{valuation_text})"
         t.save!
         t.send_tweet
       end
@@ -42,7 +42,7 @@ class Tweet
         residual_pct = residual/plane.price.to_i
         next if residual_pct.abs > 0.40
         valuation_text = "#{residual > 0 ? "undervalued" : "overvalued"} by #{((residual_pct).round(2)*100).to_i}%"
-        t.tweet_text = "#{plane.year} #{plane.make.capitalize} #{plane.model.capitalize}#{loc} delisted -- archived listing: #{x.archived_link}. Was priced at $#{plane.price.to_i.to_s.reverse.gsub(/(\d{3})(?=\d)/, '\\1,').reverse} (#{valuation_text})"
+        t.tweet_text = "#{plane.year} #{plane.make.capitalize} #{plane.model.capitalize}#{loc} delisted -- archived listing: #{plane.archived_link}. Was priced at $#{plane.price.to_i.to_s.reverse.gsub(/(\d{3})(?=\d)/, '\\1,').reverse} (#{valuation_text})"
         t.save!
         t.send_tweet
       end
