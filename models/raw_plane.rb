@@ -100,7 +100,10 @@ class RawPlane
     if self.year && self.year.to_i != 0
       return (self.year-3).upto((self.year+3)).to_a
     else
-      average_year = RawPlane.where(make: self.make, :model.in => self.similar_models).collect(&:year).collect(&:to_i).reject{|x| x == 0}.average.to_i
+      average_years = RawPlane.where(make: self.make, :model.in => self.similar_models).collect(&:year).collect(&:to_i).reject{|x| x == 0}
+      average_years = RawPlane.where(make: self.make).collect(&:year).collect(&:to_i).reject{|x| x == 0} if average_years.empty?
+      average_years = RawPlane.where(:year.nin => ["0", 0, nil]).only(:year).collect(&:year).reject{|x| x == 0} if average_years.empty?
+      average_year = average_years.average.to_i
       return (average_year-3).upto((average_year+3)).to_a
     end
   end
