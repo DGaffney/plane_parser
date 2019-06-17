@@ -27,6 +27,7 @@ class Tweeter
 
   def self.run
     while true
+      puts "Checking for tweets..."
       Tweet.check_for_tweets_to_send
       sleep(60*60)
     end

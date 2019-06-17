@@ -9,6 +9,7 @@ class Tweet
     if !self.tweet_sent
       resp = Tweeter.send_tweet_api(tweet_text)
       self.tweet_sent = true if resp.class == Twitter::Tweet
+      puts self.tweet_text
       self.save!
     end
   end
@@ -83,9 +84,13 @@ class Tweet
   end
 
   def self.check_for_tweets_to_send
+    puts "Checking for reposted listings..."
     Tweet.generate_reposted_posts
+    puts "Checking for sold planes..."
     Tweet.generate_sold_posts
+    puts "Checking for delisted listings..."
     Tweet.generate_delisted_posts
+    puts "Checking for cheap deals..."
     Tweet.generate_budget_posts
   end
 end
