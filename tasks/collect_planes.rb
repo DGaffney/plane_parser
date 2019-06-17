@@ -1,12 +1,15 @@
 class CollectPlanes
   include Sidekiq::Worker
   sidekiq_options queue: :plane_collector
+
   def self.kickoff
     1.upto(300) do |page|
       CollectPlanes.perform_async(page)
     end
     CheckRegistry.perform_in(60*60*6)
+    CollectPlanes.perform_in(60*60*6)
   end
+
   def hostname
     "http://www.trade-a-plane.com"
   end
@@ -15,32 +18,36 @@ class CollectPlanes
     "/search?s-type=aircraft&s-sort_key=days_since_update&s-sort_order=asc&s-page=#{page}&s-page_size=10"
   end
 
-  def perform(page)
-    puts page
-    page_data = Nokogiri.parse(RestClient::Request.execute(:url => hostname+page_path(page), :method => :get, :verify_ssl => false));false
-    page_data.search(".result").map do |aircraft_listing|
-      aircraft_link = aircraft_listing.search(".img_area a").collect{|l| l.attributes["href"].value}.first
-      puts "\t"+aircraft_link
-      aircraft = parse_aircraft(aircraft_listing, Nokogiri.parse(RestClient::Request.execute(:url => hostname+aircraft_link, :method => :get, :verify_ssl => false))).merge(link: aircraft_link, listing_id: listing_id(aircraft_link), category_level: category_level(aircraft_link))
-      aircraft[:avionics_package].first.split(", ").collect(&:strip).reject{|x| x.downcase.include?("avionics")}.collect{|x| x.split("(")[0]}.reject{|x| x.nil? || x.empty?} if aircraft[:avionics_package].length == 1
-      if RawPlane.where(listing_id: aircraft[:listing_id]).first.nil?
-        rp = RawPlane.new(aircraft)
-        #https://github.com/pastpages/archiveis
-        rp.archived_link = `archiveis "#{aircraft_link}"`.strip
-        rp.save!
-        GenerateRawPlaneObservation.perform_async(rp.id)
-        (aircraft[:avionics_package]||[]).each do |avionic|
-          GenerateAvionicsMatchRecord.perform_async(avionic)
+  def perform(page=nil)
+    if page.nil?
+      CollectPlanes.kickoff
+    else
+      puts page
+      page_data = Nokogiri.parse(RestClient::Request.execute(:url => hostname+page_path(page), :method => :get, :verify_ssl => false));false
+      page_data.search(".result").map do |aircraft_listing|
+        aircraft_link = aircraft_listing.search(".img_area a").collect{|l| l.attributes["href"].value}.first
+        puts "\t"+aircraft_link
+        aircraft = parse_aircraft(aircraft_listing, Nokogiri.parse(RestClient::Request.execute(:url => hostname+aircraft_link, :method => :get, :verify_ssl => false))).merge(link: aircraft_link, listing_id: listing_id(aircraft_link), category_level: category_level(aircraft_link))
+        aircraft[:avionics_package].first.split(", ").collect(&:strip).reject{|x| x.downcase.include?("avionics")}.collect{|x| x.split("(")[0]}.reject{|x| x.nil? || x.empty?} if aircraft[:avionics_package].length == 1
+        if RawPlane.where(listing_id: aircraft[:listing_id]).first.nil?
+          rp = RawPlane.new(aircraft)
+          #https://github.com/pastpages/archiveis
+          rp.archived_link = `archiveis "#{aircraft_link}"`.strip
+          rp.save!
+          GenerateRawPlaneObservation.perform_async(rp.id)
+          (aircraft[:avionics_package]||[]).each do |avionic|
+            GenerateAvionicsMatchRecord.perform_async(avionic)
+          end
+        else
+          plane = RawPlane.where(listing_id: aircraft[:listing_id]).first
+          aircraft.each do |field, value|
+            plane.send((field.to_s+"=").to_sym, value) if plane.send(field).nil?
+          end
+          plane.save!
         end
-      else
-        plane = RawPlane.where(listing_id: aircraft[:listing_id]).first
-        aircraft.each do |field, value|
-          plane.send((field.to_s+"=").to_sym, value) if plane.send(field).nil?
-        end
-        plane.save!
       end
+      sleep(10)
     end
-    sleep(10)
   end
 
   def listing_id(aircraft_link)
