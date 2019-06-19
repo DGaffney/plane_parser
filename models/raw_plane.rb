@@ -33,6 +33,7 @@ class RawPlane
   field :fractional_ownership
   field :delisted
   field :latest_certficate_reissue_date
+  field :header_image
   def self.get_predictions(filename="plane_preds2.csv")
     csv = CSV.open(filename, "w")
     RawPlane.where(:price.ne => 0).all.to_a.shuffle.collect{|rp| csv << [rp.make, rp.model, rp.category_level, rp.price, rp.predicted_price]}

@@ -103,7 +103,7 @@ class Tweet
     Tweet.generate_sold_posts
     puts "Checking for delisted listings..."
     Tweet.generate_delisted_posts
-    puts "Checking for cheap deals..."
+    puts "Checking for unique planes..."
     Tweet.generate_unique_plane_posts
     puts "Checking for cheap deals..."
     Tweet.generate_budget_posts

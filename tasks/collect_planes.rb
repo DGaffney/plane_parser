@@ -75,6 +75,7 @@ class CollectPlanes
       location: aircraft_page.search("div#main_info li")[5].text.gsub("Location: ", "").gsub(/\W/, " ").gsub(/\ +/, " ").strip,
       avionics_package: aircraft_page.search("div#avionics_equipment pre").text.split(/[(\r\n)\n,.;]/).collect{|x| x.split(" - ")}.flatten.collect(&:strip).reject{|x| x.downcase.include?("avionics")}.collect{|x| x.split("(")[0]}.reject{|x| x.nil? || x.empty?},
       image_count: aircraft_page.search("div#photos li").count,
+      header_image: aircraft_listing.search("img")[0].attributes["data-src"].value,
     }.merge(Hash[aircraft_page.search("div#general_specs p").collect{|x| k,v = x.text.gsub(" ", "_").downcase.split(":");[k.gsub("#", "num").to_sym, v]}]) 
   end
 end
