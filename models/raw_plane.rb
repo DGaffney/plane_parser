@@ -39,6 +39,44 @@ class RawPlane
     csv.close
   end
 
+  def location_text
+    self.location && !self.location.empty? ? " in #{self.location}" : ""
+  end
+
+  def year_make_model_text
+    "#{self.year} #{self.make.capitalize} #{self.model.capitalize}"
+  end
+
+  def pretty_price
+    self.price.to_i.to_s.reverse.gsub(/(\d{3})(?=\d)/, '\\1,').reverse
+  end
+
+  def full_link
+    "https://trade-a-plane.com#{self.link}"
+  end
+  
+  def post_time
+    (self.created_at || self._id.generation_time).strftime("%Y-%m-%d")
+  end
+
+  def valuation_text
+    predicted_price = self.predicted_price
+    return nil if predicted_price.nil?
+    residual = self.price.to_i-predicted_price
+    residual_pct = residual.abs/self.price.to_f
+    return nil if residual_pct.abs > 0.40
+    "#{residual > 0 ? "overvalued" : "undervalued"} by #{((residual_pct).round(2)*100).to_i}%"
+  end
+
+  def price_with_valuation_text
+    valuation_text = self.valuation_text
+    if valuation_text.nil?
+      "Priced at $#{self.pretty_price}"
+    else
+      "Priced at $#{self.pretty_price}, #{self.valuation_text}"
+    end
+  end
+
   def predicted_price
     RawPlaneObservation.where(raw_plane_id: self.id).first.predict_price rescue nil
   end

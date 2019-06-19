@@ -14,72 +14,71 @@ class Tweet
     end
   end
 
+  def self.generate_tweet(plane, text, tweet_type)
+    return nil if plane.valuation_text.nil?
+    t = Tweet.first_or_create(raw_plane_id: plane.id, tweet_type: tweet_type)
+    return nil if t.tweet_sent
+    text_generator.call(plane)
+    t.tweet_text = text
+    t.save!
+    t.send_tweet
+  end
+
   def self.generate_reposted_posts
     RawPlane.where(:created_at.gte => Time.now-24*60*60).each do |plane|
       next if plane.reg_number == "Not Listed"
       other_counts = RawPlane.where(:reg_number => plane.reg_number).count-1
       if other_counts < 1000 && other_counts > 0 && plane.reg_number.length <= 6
         most_recent_price = RawPlane.where(:id.ne => plane.id, reg_number: plane.reg_number).collect{|x| [x.created_at, x.price]}.sort_by(&:first).reverse.first.last rescue nil
-        t = Tweet.first_or_create(raw_plane_id: plane.id, tweet_type: "repost")
-        loc = plane.location && !plane.location.empty? ? " in #{plane.location}" : ""
-        predicted_price = RawPlaneObservation.where(raw_plane_id: plane.id).first.predict_price rescue nil
-        next if predicted_price.nil?
-        residual = plane.price.to_i-predicted_price
-        residual_pct = residual/plane.price.to_i
-        next if residual_pct.abs > 0.40
-        valuation_text = "#{residual > 0 ? "undervalued" : "overvalued"} by #{((residual_pct).round(2)*100).to_i}%"
-        t.tweet_text = "#{plane.year} #{plane.make.capitalize} #{plane.model.capitalize}#{loc} relisted. Was priced at #{most_recent_price.to_i.to_s.reverse.gsub(/(\d{3})(?=\d)/, '\\1,').reverse}, now priced at $#{plane.price.to_i.to_s.reverse.gsub(/(\d{3})(?=\d)/, '\\1,').reverse} (#{valuation_text})"
-        t.save!
-        t.send_tweet
+        pretty_most_recent_price = most_recent_price.to_i.to_s.reverse.gsub(/(\d{3})(?=\d)/, '\\1,').reverse
+        self.generate_tweet(
+          plane,
+          "Reposted plane alert: #{plane.year_make_model_text}#{plane.location_text} - plane has been reposted after previous price of $#{pretty_most_recent_price} and new registration is showing. #{plane.price_with_valuation_text}: archived listing available here: #{plane.archived_link}",
+          "repost"
+        )
       end
     end
-    RawPlane.where(:created_at.gte => Time.now-24*60*60).collect{|raw_plane| RawPlane.where(:reg_number => raw_plane.reg_number).count-1}
   end
+
   def self.generate_sold_posts
     RawPlane.where(delisted: true, :archived_link.nin => ["", nil], :"latest_certficate_reissue_date.last_certificate_date".ne => nil).select{|x| t = (x.last_updated||x.id.generation_time); g = x.latest_certficate_reissue_date["last_certificate_date"]-t; g > 0 && g < 5*4*7*24*60*60}.each do |plane|
-      t = Tweet.first_or_create(raw_plane_id: plane.id, tweet_type: "sold")
-      loc = plane.location && !plane.location.empty? ? " in #{plane.location}" : ""
-      predicted_price = RawPlaneObservation.where(raw_plane_id: plane.id).first.predict_price rescue nil
-      next if predicted_price.nil?
-      residual = plane.price.to_i-predicted_price
-      residual_pct = residual/plane.price.to_i
-      next if residual_pct.abs > 0.40
-      valuation_text = "#{residual > 0 ? "undervalued" : "overvalued"} by #{((residual_pct).round(2)*100).to_i}%"
-      t.tweet_text = "#{plane.year} #{plane.make.capitalize} #{plane.model.capitalize}#{loc} possibly sold - delisted and new registration -- archived listing: #{plane.archived_link}. Was priced at $#{plane.price.to_i.to_s.reverse.gsub(/(\d{3})(?=\d)/, '\\1,').reverse} (#{valuation_text})"
-      t.save!
-      t.send_tweet
+      self.generate_tweet(
+        plane,
+        "Sold plane alert: #{plane.year_make_model_text}#{plane.location_text} - plane is delisted and new registration is showing. #{plane.price_with_valuation_text}: archived listing available here: #{plane.archived_link}",
+        "sold"
+      )
     end
   end
 
   def self.generate_delisted_posts
     RawPlane.where(delisted: true, :archived_link.nin => ["", nil], :price.nin => [0, nil]).each do |plane|
-      t = Tweet.first_or_create(raw_plane_id: plane.id, tweet_type: "delisted")
-      loc = plane.location && !plane.location.empty? ? " in #{plane.location}" : ""
-      predicted_price = RawPlaneObservation.where(raw_plane_id: plane.id).first.predict_price rescue nil
-      next if predicted_price.nil?
-      residual = plane.price.to_i-predicted_price
-      residual_pct = residual/plane.price.to_i
-      next if residual_pct.abs > 0.40
-      valuation_text = "#{residual > 0 ? "undervalued" : "overvalued"} by #{((residual_pct).round(2)*100).to_i}%"
-      t.tweet_text = "#{plane.year} #{plane.make.capitalize} #{plane.model.capitalize}#{loc} delisted -- archived listing: #{plane.archived_link}. Was priced at $#{plane.price.to_i.to_s.reverse.gsub(/(\d{3})(?=\d)/, '\\1,').reverse} (#{valuation_text})"
-      t.save!
-      t.send_tweet
+      self.generate_tweet(
+        plane,
+        "Delisted plane alert: #{plane.year_make_model_text}#{plane.location_text} - post now offline. #{plane.price_with_valuation_text}: archived listing available here: #{plane.archived_link}",
+        "delisted"
+      )
+    end
+  end
+
+  def self.generate_unique_plane_posts
+    RawPlane.where(:created_at.gte => Time.now-60*60*24).each do |plane|
+      if RawPlane.where(make: plane.make, model: plane.model).count == 1
+        self.generate_tweet(
+          plane,
+          "Rare plane alert: #{plane.year_make_model_text}#{plane.location_text} - no other planes match this make/model. #{plane.price_with_valuation_text}: #{plane.full_link}",
+          "unique"
+        )
+      end
     end
   end
 
   def self.generate_budget_posts
     RawPlane.where(:price.gt => 0, :price.lte => 30000, :created_at.gte => Time.now-60*60*24).each do |plane|
-      t = Tweet.first_or_create(raw_plane_id: plane.id, tweet_type: "budget")
-      loc = plane.location && !plane.location.empty? ? " in #{plane.location}" : ""
-      predicted_price = RawPlaneObservation.where(raw_plane_id: plane.id).first.predict_price rescue nil
-      next if predicted_price.nil?
-      residual = plane.price.to_i-predicted_price
-      residual_pct = residual/plane.price.to_i
-      next if residual_pct.abs > 0.40
-      valuation_text = "#{plane.price.to_i < predicted_price ? "undervalued" : "overvalued"} by #{(((residual_pct).round(2)*100).to_i).abs}%"
-      t.tweet_text = "Cheap plane alert: #{plane.year} #{plane.make.capitalize} #{plane.model.capitalize}#{loc}. Priced at $#{plane.price.to_i.to_s.reverse.gsub(/(\d{3})(?=\d)/, '\\1,').reverse} (#{valuation_text}): https://trade-a-plane.com#{plane.link}"
-      t.save!
-      t.send_tweet
+      self.generate_tweet(
+        plane,
+        "Cheap plane alert: #{plane.year_make_model_text}#{plane.location_text}. #{plane.price_with_valuation_text}: #{plane.full_link}",
+        "budget"
+      )
     end
   end
 
@@ -89,19 +88,15 @@ class Tweet
      predicted_prices = Hash[RawPlaneObservation.where(:raw_plane_id.in => plane_ids).collect{|x| [x.raw_plane_id, x.predict_price]}]
      deals = plane_ids.collect{|x| [RawPlane.find(x), RawPlane.find(x).price.to_f-predicted_prices[x].to_f]}.sort_by(&:last).select{|x| x.last.abs/x.first.price < 0.50 && x.last.abs/x.first.price > 0.05 && x.first.price < 300000 && x.last < 0}
      deals.each do |plane, savings|
-       t = Tweet.new(raw_plane_id: plane.id, tweet_type: "sold")
-       loc = plane.location && !plane.location.empty? ? " in #{plane.location}" : ""
-       t.tweet_text = "#{plane.year} #{plane.make.capitalize} #{plane.model.capitalize}#{loc} -- $#{plane.price.to_i.to_s.reverse.gsub(/(\d{3})(?=\d)/, '\\1,').reverse}, undervalued by ≈#{((savings.abs/plane.price).round(2)*100).to_i}% (posted #{plane._id.generation_time.strftime("%Y-%m-%d")}): https://trade-a-plane.com#{plane.link}"
-       t.save!
-       plane.deal_tweeted = true
-       plane.save!
-       t.send_tweet
+       self.generate_tweet(
+         plane,
+         "Undervalued plane alert: #{plane.year_make_model_text}#{plane.location_text}. #{plane.price_with_valuation_text}: #{plane.full_link}",
+         "deal"
+       )
      end
    end
 
   def self.check_for_tweets_to_send
-    puts "Checking for deal posts..."
-    Tweet.generate_deal_posts
     puts "Checking for reposted listings..."
     Tweet.generate_reposted_posts
     puts "Checking for sold planes..."
@@ -109,6 +104,10 @@ class Tweet
     puts "Checking for delisted listings..."
     Tweet.generate_delisted_posts
     puts "Checking for cheap deals..."
+    Tweet.generate_unique_plane_posts
+    puts "Checking for cheap deals..."
     Tweet.generate_budget_posts
+    puts "Checking for deal posts..."
+    Tweet.generate_deal_posts
   end
 end
