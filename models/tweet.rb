@@ -22,6 +22,7 @@ class Tweet
     t.tweet_text = text
     t.save!
     t.send_tweet
+    sleep(3)
   end
 
   def self.generate_reposted_posts
