@@ -16,7 +16,7 @@ class Tweet
 
   def self.generate_tweet(plane, text, tweet_type)
     return nil if plane.valuation_text.nil?
-    t = Tweet.first_or_create(raw_plane_id: plane.id, tweet_type: tweet_type)
+    t = Tweet.where(raw_plane_id: plane.id, tweet_type: tweet_type).first || Tweet.new(raw_plane_id: plane.id, tweet_type: tweet_type)
     return nil if t.tweet_sent
     text_generator.call(plane)
     t.tweet_text = text
@@ -33,7 +33,7 @@ class Tweet
         pretty_most_recent_price = most_recent_price.to_i.to_s.reverse.gsub(/(\d{3})(?=\d)/, '\\1,').reverse
         self.generate_tweet(
           plane,
-          "Reposted plane alert: #{plane.year_make_model_text}#{plane.location_text} - plane has been reposted after previous price of $#{pretty_most_recent_price} and new registration is showing. #{plane.price_with_valuation_text}: archived listing available here: #{plane.archived_link}",
+          "Reposted plane alert: #{plane.year_make_model_text}#{plane.location_text} - plane has been reposted after previous price of $#{pretty_most_recent_price} and new registration is showing. #{plane.price_with_valuation_text}. Listing available here: #{plane.full_link}",
           "repost"
         )
       end
