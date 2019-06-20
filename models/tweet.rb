@@ -18,7 +18,6 @@ class Tweet
     return nil if plane.valuation_text.nil?
     t = Tweet.where(raw_plane_id: plane.id, tweet_type: tweet_type).first || Tweet.new(raw_plane_id: plane.id, tweet_type: tweet_type)
     return nil if t.tweet_sent
-    text_generator.call(plane)
     t.tweet_text = text
     t.save!
     t.send_tweet
