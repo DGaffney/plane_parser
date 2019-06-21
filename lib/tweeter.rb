@@ -1,12 +1,18 @@
 class Tweeter
-  def self.send_tweet_api(tweet_text)
+  def self.send_tweet_api(tweet_text, image_path=nil)
     client = Twitter::REST::Client.new do |config|
       config.consumer_key        = SETTINGS["consumer_key"]
       config.consumer_secret     = SETTINGS["consumer_secret"]
       config.access_token        = SETTINGS["access_token"]
       config.access_token_secret = SETTINGS["access_secret"]
     end
-    client.update(tweet_text)
+    if image_path.nil?
+      client.update(tweet_text)
+    else
+      `wget -O image.png "https://trade-a-plane.com#{image_path}"`
+      client.update_with_media(tweet_text, File.new("image.png"))
+      `rm image.png`
+    end
   end
 
   def self.send_tweet_selenium(tweet_text)
