@@ -5,9 +5,17 @@ class Tweet
   field :raw_plane_id
   field :tweet_sent, type: Boolean, default: false
   
+  def plane
+    @plane ||= RawPlane.where(id: self.raw_plane_id).first
+  end
+
   def send_tweet
     if !self.tweet_sent
-      resp = Tweeter.send_tweet_api(tweet_text)
+      if self.plane.image_count > 1
+        resp = Tweeter.send_tweet_api(tweet_text, self.plane.header_image)
+      else
+        resp = Tweeter.send_tweet_api(tweet_text)
+      end
       self.tweet_sent = true if resp.class == Twitter::Tweet
       puts self.tweet_text
       self.save!
