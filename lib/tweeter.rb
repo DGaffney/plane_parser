@@ -10,9 +10,10 @@ class Tweeter
       client.update(tweet_text)
     else
       `wget -O image.png "https://trade-a-plane.com#{image_path}"`
-      client.update_with_media(tweet_text, File.new("image.png"))
+      resp = client.update_with_media(tweet_text, File.new("image.png"))
       `rm image.png`
     end
+    return resp
   end
 
   def self.send_tweet_selenium(tweet_text)
