@@ -41,7 +41,7 @@ class Tweet
         pretty_most_recent_price = most_recent_price.to_i.to_s.reverse.gsub(/(\d{3})(?=\d)/, '\\1,').reverse
         self.generate_tweet(
           plane,
-          "Reposted plane alert: #{plane.year_make_model_text}#{plane.location_text} - plane has been reposted after previous price of $#{pretty_most_recent_price} and new registration is showing. #{plane.price_with_valuation_text}. Listing available here: #{plane.full_link}",
+          "Reposted plane alert: #{plane.year_make_model_text}#{plane.location_text} - plane has been reposted after previous price of $#{pretty_most_recent_price}. #{plane.price_with_valuation_text}. Listing available here: #{plane.full_link}",
           "repost"
         )
       end
