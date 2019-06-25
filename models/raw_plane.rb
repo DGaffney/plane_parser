@@ -45,7 +45,7 @@ class RawPlane
   end
 
   def year_make_model_text
-    "#{self.year} #{self.make.capitalize} #{self.model.capitalize}"
+    "#{self.year.to_i == 0 ? "" : self.year} #{self.make.capitalize} #{self.model.capitalize}"
   end
 
   def pretty_price
