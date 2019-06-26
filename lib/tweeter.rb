@@ -7,7 +7,7 @@ class Tweeter
       config.access_token_secret = SETTINGS["access_secret"]
     end
     if image_path.nil?
-      client.update(tweet_text)
+      resp = client.update(tweet_text)
     else
       `wget -O image.png "https://trade-a-plane.com#{image_path}"`
       resp = client.update_with_media(tweet_text, File.new("image.png"))
