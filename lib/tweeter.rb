@@ -10,7 +10,11 @@ class Tweeter
       resp = client.update(tweet_text)
     else
       `wget -O image.png "https://trade-a-plane.com#{image_path}"`
-      resp = client.update_with_media(tweet_text, File.new("image.png"))
+      begin
+        resp = client.update_with_media(tweet_text, File.new("image.png"))
+      rescue
+        resp = client.update(tweet_text)
+      end
       `rm image.png`
     end
     return resp
