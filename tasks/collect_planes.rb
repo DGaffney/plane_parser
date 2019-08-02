@@ -6,8 +6,8 @@ class CollectPlanes
     1.upto(300) do |page|
       CollectPlanes.perform_async(page)
     end
-    CheckRegistry.perform_in(60*60*6)
-    CollectPlanes.perform_in(60*60*6)
+    CheckRegistry.perform_in(60*60*6) if !Sidekiq::ScheduledSet.new.to_a.collect{|x| x.item["class"]}.include?("CheckRegistry")
+    CollectPlanes.perform_in(60*60*6) if !Sidekiq::ScheduledSet.new.to_a.collect{|x| x.item["class"]}.include?("CollectPlanes")
   end
 
   def hostname
