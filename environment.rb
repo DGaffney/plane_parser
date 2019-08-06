@@ -4,6 +4,7 @@ require 'pycall/import'
 include PyCall::Import
 require 'sinatra'
 require 'sidekiq'
+require 'sidekiq/api'
 require 'json'
 require 'nokogiri'
 #require 'selenium-webdriver'
