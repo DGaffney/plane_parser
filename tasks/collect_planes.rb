@@ -4,8 +4,6 @@ class CollectPlanes
 
   def self.kickoff
     CollectPlanes.perform_async
-    CheckRegistry.perform_in(60*60*6) if !Sidekiq::ScheduledSet.new.to_a.collect{|x| x.item["class"]}.include?("CheckRegistry")
-    CollectPlanes.perform_in(60*60*1) if !Sidekiq::ScheduledSet.new.to_a.collect{|x| x.item["class"]}.include?("CollectPlanes")
   end
 
   def hostname
@@ -60,6 +58,8 @@ class CollectPlanes
         plane.save!
       end
     end
+    CheckRegistry.perform_in(60*60*3) if !Sidekiq::ScheduledSet.new.to_a.collect{|x| x.item["class"]}.include?("CheckRegistry")
+    CollectPlanes.perform_in(60*60*3) if !Sidekiq::ScheduledSet.new.to_a.collect{|x| x.item["class"]}.include?("CollectPlanes")
   end
 
   def listing_id(aircraft_link)
