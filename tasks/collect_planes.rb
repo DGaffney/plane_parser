@@ -3,33 +3,27 @@ class CollectPlanes
   sidekiq_options queue: :plane_collector
 
   def self.kickoff
-    1.upto(300) do |page|
-      CollectPlanes.perform_async(page)
-    end
+    CollectPlanes.perform_async
     CheckRegistry.perform_in(60*60*6) if !Sidekiq::ScheduledSet.new.to_a.collect{|x| x.item["class"]}.include?("CheckRegistry")
-    CollectPlanes.perform_in(60*60*6) if !Sidekiq::ScheduledSet.new.to_a.collect{|x| x.item["class"]}.include?("CollectPlanes")
+    CollectPlanes.perform_in(60*60*1) if !Sidekiq::ScheduledSet.new.to_a.collect{|x| x.item["class"]}.include?("CollectPlanes")
   end
 
   def hostname
     "http://www.trade-a-plane.com"
   end
 
-  def page_path(page=1)
-    "/search?s-type=aircraft&s-sort_key=days_since_update&s-sort_order=asc&s-page=#{page}&s-page_size=10"
+  def page_path
+    "/search?s-type=aircraft&s-advanced=yes&sale_status=For+Sale&user_distance=1000000&s-sort_key=days_since_update&s-sort_order=asc&s-page_size=48"
   end
 
-  def perform(page=nil)
-    if page.nil?
-      CollectPlanes.kickoff
-    else
-      puts page
+  def perform
       got_page = false
       while !got_page
         begin
-        page_data = Nokogiri.parse(RestClient::Request.execute(:url => hostname+page_path(page), :method => :get, :verify_ssl => false));false
+        page_data = Nokogiri.parse(RestClient::Request.execute(:url => hostname+page_path, :method => :get, :verify_ssl => false));false
         got_page =  true
         rescue
-	  sleep(5)
+          sleep(5)
           print(".")
           retry
         end
