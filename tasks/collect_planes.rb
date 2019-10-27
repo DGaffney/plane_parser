@@ -29,7 +29,8 @@ class CollectPlanes
         page_data = Nokogiri.parse(RestClient::Request.execute(:url => hostname+page_path(page), :method => :get, :verify_ssl => false));false
         got_page =  true
         rescue
-	  sleep(3)
+	  sleep(5)
+          print(".")
           retry
         end
       end
@@ -42,7 +43,8 @@ class CollectPlanes
           aircraft = parse_aircraft(aircraft_listing, Nokogiri.parse(RestClient::Request.execute(:url => hostname+aircraft_link, :method => :get, :verify_ssl => false))).merge(link: aircraft_link, listing_id: listing_id(aircraft_link), category_level: category_level(aircraft_link))
           got_page =  true
           rescue
-            sleep(3)
+            sleep(5)
+            print(".")
             retry
           end
         end
