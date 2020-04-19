@@ -6,7 +6,7 @@ class Site < Sinatra::Base
       return {listing_id: params[:listing_id], predicted_price: cp.predicted_price}.to_json
     else
       if (raw_plane = RawPlane.where(listing_id: params[:listing_id]).first)
-        cp = CachedPrediction.new(listing_id: params[:listing_id], raw_plane_id: raw_plane.id, predicted_price: raw_plane.predicted_price)
+        cp = CachedPrediction.new(listing_id: params[:listing_id], raw_plane_id: raw_plane.id, predicted_price: raw_plane.predicted_price_python_load)
         cp.hits += 1
         cp.save!
         return {listing_id: params[:listing_id], predicted_price: cp.predicted_price}.to_json
