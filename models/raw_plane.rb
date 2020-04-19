@@ -82,6 +82,10 @@ class RawPlane
     RawPlaneObservation.where(raw_plane_id: self.id).first.predict_price rescue nil
   end
 
+  def predicted_price_python_load
+    RawPlaneObservation.where(raw_plane_id: self.id).first.predict_price(false, true) rescue nil
+  end
+
   def plane_online?
     page_data = Nokogiri.parse(RestClient::Request.execute(:url => "https://trade-a-plane.com"+self.link, :method => :get, :verify_ssl => false));false
     page_data.search("title").text.include?(self.listing_id)

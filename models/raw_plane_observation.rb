@@ -121,9 +121,21 @@ class RawPlaneObservation#.train_model
     @@stored_avionic_key_data ||= JSON.parse(File.read("raw_plane_observation_avionic_keys.json"))
   end
 
-  def predict_price(include_appraisal=false)
+  def predict_price(include_appraisal=false, python_load=false)
     avionic_type_keys, manufacturer_keys, device_keys = RawPlaneObservation.stored_avionics_keys
-    RawPlaneObservation.predict(RawPlaneObservation.get_model_data(avionic_type_keys, manufacturer_keys, device_keys, [self], include_appraisal)[0])
+    observation_data = RawPlaneObservation.get_model_data(avionic_type_keys, manufacturer_keys, device_keys, [self], include_appraisal)[0]
+    if python_load
+      observation_filename = "observation_data_#{self.id}.json"
+      model_filename = "raw_plane_observation_model#{include_appraisal ? "_full" : "_no_appraisal"}.pkl"
+      f = File.open(observation_filename, "w")
+      f.write(observation_data.to_json)
+      f.close
+      result = `python external_model_question.py #{model_filename} #{observation_filename}`
+      `rm #{observation_filename}`
+      return result
+    else
+      return RawPlaneObservation.predict(observation_data)
+    end
   end
   
   def self.predict(data)
