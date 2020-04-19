@@ -6,10 +6,15 @@ class Site < Sinatra::Base
       return {listing_id: params[:listing_id], predicted_price: cp.predicted_price}.to_json
     else
       if (raw_plane = RawPlane.where(listing_id: params[:listing_id]).first)
-        cp = CachedPrediction.new(listing_id: params[:listing_id], raw_plane_id: raw_plane.id, predicted_price: raw_plane.predicted_price_python_load)
-        cp.hits += 1
-        cp.save!
-        return {listing_id: params[:listing_id], predicted_price: cp.predicted_price}.to_json
+        result = raw_plane.predicted_price_python_load rescue nil
+        if result
+          cp = CachedPrediction.new(listing_id: params[:listing_id], raw_plane_id: raw_plane.id, predicted_price: result)
+          cp.hits += 1
+          cp.save!
+          return {listing_id: params[:listing_id], predicted_price: cp.predicted_price}.to_json
+        else
+          return {listing_id: params[:listing_id], error: "Model failed to yield a response! Message /u/dgaff on Reddit or @tap_deals on Twitter to flag this issue."}.to_json
+        end
       end
     end
     return {listing_id: params[:listing_id], error: "Plane not in database, sorry!"}.to_json

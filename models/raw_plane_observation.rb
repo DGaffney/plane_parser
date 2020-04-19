@@ -130,7 +130,7 @@ class RawPlaneObservation#.train_model
       f = File.open(observation_filename, "w")
       f.write(observation_data.to_json)
       f.close
-      result = `python external_model_question.py #{model_filename} #{observation_filename}`
+      result = JSON.parse(`python external_model_question.py #{model_filename} #{observation_filename}`)[0]
       `rm #{observation_filename}`
       return result
     else
