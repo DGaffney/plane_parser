@@ -70,7 +70,7 @@ class RawPlaneObservation#.train_model
 
   def self.generate_dataset(include_appraisal=false, include_avionics=true)
     all_planes = RawPlaneObservation.where(:raw_plane_id.in => RawPlane.where(:category_level => "Single+Engine+Piston", :price.lte => 150000).collect(&:id), :price.ne => 0).all.to_a.shuffle#.select{|rp| rp.year.to_i != 0 && rp.year < 1985}.collect(&:id), :price.ne => 0).all.to_a.shuffle
-    all_planes = RawPlaneObservation.where(:raw_plane_id.in => RawPlane.all.collect(&:id), :price.ne => 0).all.to_a.shuffle#.select{|rp| rp.year.to_i != 0 && rp.year < 1985}.collect(&:id), :price.ne => 0).all.to_a.shuffle
+    all_planes = RawPlaneObservation.where(:raw_plane_id.in => RawPlane.all.collect(&:id), :price.ne => 0, :price.gte => 10000, :price.lte => 10000000).all.to_a.shuffle#.select{|rp| rp.year.to_i != 0 && rp.year < 1985}.collect(&:id), :price.ne => 0).all.to_a.shuffle
     avionic_types, manufacturers, devices = all_planes.collect(&:avionic_data).reject(&:empty?).transpose
     avionic_type_keys = RawPlaneObservation.merge_hashes(avionic_types).keys
     manufacturer_keys = RawPlaneObservation.merge_hashes(manufacturers).keys

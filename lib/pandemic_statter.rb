@@ -33,6 +33,9 @@ class PandemicStatter
     Time.parse("February 21 2020")
   end
 
+  def self.end_date
+    Time.parse("March 15 2020")
+  end
   def self.diff_row(plane, other_plane, pandemic)
     {
       diff: other_plane.price-plane.price,
@@ -78,15 +81,15 @@ class PandemicStatter
   def self.generate_diff_observations
     diffs = []
     cases = []
-    planes = RawPlane.where(:price.nin => [nil, 0], :price.lt => 300000, :created_at.gte => start_date, :reg_number.nin => ["Not Listed", "", nil])
+    planes = RawPlane.where(:price.nin => [nil, 0], :price.lt => 300000, :created_at.gte => end_date, :reg_number.nin => ["Not Listed", "", nil])
     planes.each do |plane|
       cases << plane.id
-      RawPlane.where(reg_number: plane.reg_number, :price.lt => 300000, :id.ne => plane.id, :created_at.gte => start_date-60*60*24*180).each do |other_plane|
+      RawPlane.where(reg_number: plane.reg_number, :price.lt => 300000, :id.ne => plane.id, :created_at.gte => end_date-60*60*24*180).each do |other_plane|
         diffs << self.diff_row(plane, other_plane, 1)
         cases << other_plane.id
       end
     end
-    prev_time = Time.now-(60*60*24*180 + 60*60*24*rand(200))
+    prev_time = start_date-(60*60*24*180 + 60*60*24*rand(200))
     planes = RawPlane.where(:price.nin => [nil, 0], :price.lt => 300000, :created_at.gte => prev_time, :created_at.lte => start_date, :reg_number.nin => ["Not Listed", "", nil], :id.nin => cases)
     planes.each do |plane|
       RawPlane.where(reg_number: plane.reg_number, :price.lt => 300000, :id.ne => plane.id, :created_at.gte => prev_time-60*60*24*180).each do |other_plane|
@@ -99,7 +102,7 @@ class PandemicStatter
   def self.generate_observations
     obs = []
     cases = []
-    planes = RawPlane.where(:price.nin => [nil, 0], :price.lt => 300000, :created_at.gte => start_date, :reg_number.nin => ["Not Listed", "", nil])
+    planes = RawPlane.where(:price.nin => [nil, 0], :price.lt => 300000, :created_at.gte => end_date, :reg_number.nin => ["Not Listed", "", nil])
     planes.each do |plane|
       cases << plane.id
       obs << self.plane_row(plane, 1)
@@ -153,8 +156,12 @@ class PandemicStatter
     puts "rsync root@#{ip}:plane_parser/#{filename} #{filename}\n"
     puts "Regression:"
     if keys.include?("diff")
+      puts "clear"
+      puts "inshseet using ~/#{filename}"
       puts "regress diff #{(keys-["diff", "old", "new", "price", "reg_number", "model"]).join(" ")}\n"
     else
+      puts "clear"
+      puts "inshseet using ~/#{filename}"
       puts "regress price #{(keys-["price", "diff", "reg_number", "model"]).join(" ")}\n"
     end
   end
