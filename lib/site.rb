@@ -16,7 +16,7 @@ class Site < Sinatra::Base
   end
   
   get "/get_listing_ids.json" do
-    since_time = Time.parse(params[:since]) rescue nil
+    since_time = Time.parse(params[:since_time]) rescue nil
     parse_error = since_time.nil?
     since_time ||= Time.now-60*60*24*7
     return {since_time: since_time, used_since_time_default: parse_error, listing_ids: RawPlane.where(:created_at.gte => since_time).distinct(:listing_id)}.to_json
