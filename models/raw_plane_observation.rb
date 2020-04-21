@@ -111,9 +111,7 @@ class RawPlaneObservation#.train_model
   end
 
   def self.get_model(include_appraisal=false)
-    puts "loading model..."
     @@current_raw_plane_observation_model ||= pickle.loads(open("raw_plane_observation_model#{include_appraisal ? "_full" : "_no_appraisal"}.pkl").read)
-    puts "model Loaded"
     @@current_raw_plane_observation_model
   end
 
