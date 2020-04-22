@@ -1,7 +1,7 @@
 class Site < Sinatra::Base
   post "/parse_search_page.json" do
     body_params = JSON.parse(request.body.read)
-    search_url = URI.parse(URI.decode()) rescue nil
+    search_url = URI.parse(URI.decode(body_params["search_url"])) rescue nil
     return {error: "Error! Can't parse url that looks like: #{body_params["search_url"]}. Please provide a Trade-A-Plane search results URL"}.to_json if search_url.nil? || !search_url.host.include?("trade-a-plane.com")
     return {error: "Please provide a Trade-A-Plane search URL"}.to_json if search_url.path != "/search"
     return {error: "Please provide a Trade-A-Plane search URL for aircraft only - this search doesn't look to be for aircraft."}.to_json if !search_url.query.include?("s-type=aircraft")
