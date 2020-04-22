@@ -182,7 +182,7 @@
           } else {
             search_results_table = ""
             for (i = 0; i < results.search_params; i++) {
-              search_results_table += "<tr><td><em>"+results.search_params[i][0]+"</em></td><td>"+results.search_params[i][1]+"</td></tr>"
+              search_results_table = search_results_table +  "<tr><td><em>"+results.search_params[i][0]+"</em></td><td>"+results.search_params[i][1]+"</td></tr>"
             }
           }
           var i;
