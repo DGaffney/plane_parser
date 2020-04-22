@@ -63,7 +63,7 @@ module.exports = {
   },
   parse_search_page: function (search_url, callback) {
       search_url = search_url || ""
-      get("parse_search_page.json?search_url="+search_url, function(err, body){
+      post("parse_search_page.json", {"search_url": search_url}, function(err, body){
           callback(body)
       })
   },
