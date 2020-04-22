@@ -181,13 +181,12 @@
             sendAlert(results.error)
           } else {
             search_results_table = ""
-            for (i = 0; i < results.search_params; i++) {
+            for (i = 0; i < results.search_params.length; i++) {
               search_results_table = search_results_table +  "<tr><td><em>"+results.search_params[i][0]+"</em></td><td>"+results.search_params[i][1]+"</td></tr>"
             }
+            $("#results_table").html(search_results_table)
+            $("#search_url_confirm").html("<a href='"+results.search_url+"'>"+results.search_url+"</a>")
           }
-          var i;
-          $("#results_table").html(search_results_table)
-          $("#search_url_confirm").html("<a href='"+results.search_url+"'>"+results.search_url+"</a>")
           
         }
         function validateSearch(){
