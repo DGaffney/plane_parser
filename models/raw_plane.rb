@@ -230,4 +230,23 @@ class RawPlane
       (imputed_results["appraisal_range"][1] rescue 0),
     ]}.merge(avionic_data: self.avionic_data(imputed_results, distinct_values), price: imputed_results["price"])
   end
+  
+  def self.generate_make_model_variations
+    make_models = RawPlane.only(:make, :model).collect{|k| [k.make, k.model]}
+    csv = CSV.open("model_name_variations.csv", "w")
+    i = 0
+    make_models.each do |make, model|
+      i += 1
+      puts i
+      makes = [AvionicDisambiguator.avionic_substring_generator(make), AvionicDisambiguator.avionic_substring_generator(make.downcase), AvionicDisambiguator.avionic_substring_generator(make.split(" ").collect(&:capitalize).join(" "))].flatten
+      models = [AvionicDisambiguator.avionic_substring_generator(model), AvionicDisambiguator.avionic_substring_generator(model.downcase), AvionicDisambiguator.avionic_substring_generator(model.split(" ").collect(&:capitalize).join(" "))].flatten
+      makes.each do |m|
+        models.each do |mm|
+        csv << [m+" "+mm]
+        csv << [mm+" "+m]
+        end
+      end
+    end;false
+    csv.close
+  end
 end

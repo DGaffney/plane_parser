@@ -4,6 +4,7 @@ class Tweet
   field :tweet_type
   field :raw_plane_id
   field :tweet_sent, type: Boolean, default: false
+  field :send_tweet_at, type: Time
   
   def plane
     @plane ||= RawPlane.where(id: self.raw_plane_id).first
@@ -27,8 +28,9 @@ class Tweet
     t = Tweet.where(raw_plane_id: plane.id, tweet_type: tweet_type).first || Tweet.new(raw_plane_id: plane.id, tweet_type: tweet_type)
     return nil if t.tweet_sent
     t.tweet_text = text
+    t.send_tweet_at = Time.now+60*60*24
     t.save!
-    t.send_tweet
+    SendTweet.perform_at(t.send_tweet_at, t.id)
     sleep(3)
   end
 

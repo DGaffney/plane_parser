@@ -1,0 +1,298 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Quora Pixel Code (JS Helper) -->
+    <script>
+    !function(q,e,v,n,t,s){if(q.qp) return; n=q.qp=function(){n.qp?n.qp.apply(n,arguments):n.queue.push(arguments);}; n.queue=[];t=document.createElement(e);t.async=!0;t.src=v; s=document.getElementsByTagName(e)[0]; s.parentNode.insertBefore(t,s);}(window, 'script', 'https://a.quora.com/qevents.js');
+    qp('init', '96363ce559234c83ab47793e553c0904');
+    qp('track', 'ViewContent');
+    </script>
+    <noscript><img height="1" width="1" style="display:none" src="https://q.quora.com/_/ad/96363ce559234c83ab47793e553c0904/pixel?tag=ViewContent&noscript=1"/></noscript>
+    <!-- End of Quora Pixel Code -->
+    <script>qp('track', 'Generic');</script>
+      <!-- Global site tag (gtag.js) - Google Analytics -->
+      <script async src="https://www.googletagmanager.com/gtag/js?id=UA-144174611-1"></script>
+      <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-145724150-1');
+      </script>
+    <title>Localet | Small Business Competitive Tracking</title>
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
+<script src="/files/typeahead.js">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  <link href="https://fonts.googleapis.com/css?family=Catamaran:100,200,300,400,500,600,700,800,900" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Lato:100,100i,300,300i,400,400i,700,700i,900,900i" rel="stylesheet">
+  <script src="https://kit.fontawesome.com/035ea2adea.js"></script>
+  
+<link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.5.0/css/bootstrap4-toggle.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.5.0/js/bootstrap4-toggle.min.js"></script>
+  <link href="/css/one-page-wonder.min.css" rel="stylesheet">
+  <meta name="description" content="Localet: Competitive Tracking for Small Businesses. Keep up-to-date with changes made by people who compete for your customers.">
+  <meta property="og:title" content="Localet | Small Business Competitive Tracking" />
+  <meta property="og:url" content="http://localet.club/" />
+  <meta property="og:description" content="Competitive Tracking for Small Businesses. Keep up-to-date with changes made by people who compete for your customers.">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head>
+  <body>
+  <header class="masthead text-center text-white" style="padding: 1em">
+    <div class="masthead-content">
+      <div class="container" >
+        <h1 class="masthead-heading mb-0">Localet</h1>
+      </div>
+    </div>
+  </header>
+    <section id="try_now_main" role="main" class="flex-shrink-0 collapse show">
+        <div class="container">
+            <br />
+            <h2>Confirm your subscription</h2>
+            <div id="similarity_results" class="collapse">
+                <h5>We think that these companies have similar customer bases to {{{business.name}}} - deselect any you disagree with.</h5>
+                <br />
+                <div id="similarity_results_table_holder">
+                    <div id="similarity_results_lookup_form">
+                        <div class="form-row"><div class="col-md-6"><div id="remote"><input id="specific_lookup_form" class="typeahead form-control" type="text" placeholder="Add a specific company"></div></div><div class="col-md-3"></div><div class="col-md-2"><button type="submit" class="submit btn btn-primary btn-lg" onclick="setupEmail()">I'm Done</button></div></div><br />
+                    </div>
+                    <br />
+                    <table class="table">
+                      <thead>
+                        <tr>
+                          <th scope="col"></th>
+                          <th scope="col">Business Name</th>
+                          <th scope="col">Location</th>
+                          <th scope="col">Categories</th>
+                        </tr>
+                      </thead>
+                      <tbody id="similarity_results_table">
+                          {{#tracked_businesses.length}}
+                          {{#tracked_businesses}}
+                              {{#.}}
+                              <tr id="{{{id}}}" class="business-tile-selected">
+                              <td><div class="toggle btn btn-primary btn-xs" data-toggle="toggle" role="button" style="width: 0px; height: 0px;"><input class="toggler" type="checkbox" checked="" data-toggle="toggle" data-size="xs" data-on="On " data-off="Off " id="{{{id}}}_button"><div class="toggle-group"><label class="btn btn-primary btn-xs toggle-on">On </label><label class="btn btn-light btn-xs toggle-off">Off </label><span class="toggle-handle btn btn-light btn-xs"></span></div></div>
+                              </td>
+                              <td><a href="https://www.yelp.com/biz/{{{yelp_alias}}}"><b>{{{name}}}</b></a></td>
+                              <td>{{{location}}}</td>
+                              <td>{{{categories}}}</td>
+                              </tr>
+                              {{/.}}
+                          {{/tracked_businesses}}
+                          {{/tracked_businesses.length}}
+                          {{^tracked_businesses.length}}
+                              <li>Not tracking any competitors</li>
+                          {{/tracked_businesses.length}}
+                          
+                      </tbody>
+                    </table>
+                    <div id="post_similarity_bucket">
+                        <div class="row"><div class="col-md-12"><button type="submit" class="submit btn btn-primary btn-lg" onclick="setupEmail()">I'm Done</button></div></div><br />
+                    </div>
+                </div>
+            </div>
+            <div id="sign_up" class="collapse show">
+                <br />
+                <h5><span id="company_lookup_text" style="">Tracking <span id="competitor_count">{{tracked_businesses.length}}</span> competitors for <a href="https://www.yelp.com/biz/{{business.yelp_alias}}">{{ business.name }}</a> in {{ business.location }}</span></h5>
+                <p><em><a class="primary" style="text-decoration: underline" href="#" onclick="showCompetitorEdit()">Edit Competitor List?</a></em></p>
+                <form id="sign_up_finish" >
+                      <label>What's your email?</label>
+                      <input id="email" type="email" class="form-control" placeholder="name@example.com" value="{{{email_address}}}">
+                      <br />
+                      <p>What sorts of emails do you want?</p>
+                      <div class="form-group">
+                          <div class="form-check">
+                              <input class="form-check-input" type="checkbox" value="" id="primary_events" checked>
+                              <label class="form-check-label" for="primary_events">
+                                Big news like shop closures
+                              </label>
+                          </div>
+                      </div>
+                      <div class="form-group">
+                          <div class="form-check">
+                              <input class="form-check-input" type="checkbox" value="" id="attribute_updates" checked>
+                              <label class="form-check-label" for="attribute_updates">
+                                Tweaks on company profiles
+                              </label>
+                          </div>
+                      </div>
+                      <div class="form-group">
+                          <div class="form-check">
+                              <input class="form-check-input" type="checkbox" value="" id="reviews" checked>
+                              <label class="form-check-label" for="reviews">
+                                Interesting reviews that customers left
+                              </label>
+                          </div>
+                      </div>
+                      <div class="form-group">
+                          <div class="form-check">
+                              <input class="form-check-input" type="checkbox" value="" id="search_ranks" checked>
+                              <label class="form-check-label" for="search_ranks">
+                                Shifts in search result rankings
+                              </label>
+                          </div>
+                      </div>
+                      <button type="submit" class="submit btn btn-primary btn-lg" onclick="signUp()">Sign me up</button>
+                </form>
+            </div>
+            <div id="thank_you" class="collapse">
+                <h2>Thank you!</h2>
+                <h4>Thanks for signing up - we'll send you the latest updates matching your preferences right away, and we'll update you as we see things you should be aware of - <a href="/">set up another tracker?</a></h4>
+            </div>
+        </div>
+    </section>
+    <script type="text/javascript">
+        function showCompetitorEdit(){
+            $("#similarity_results").collapse("show")
+            $("#similarity_results_table").collapse("show")
+        }
+        function postData(url = '', data = {}) {
+          // Default options are marked with *
+            return fetch(url, {
+                method: 'POST', // *GET, POST, PUT, DELETE, etc.
+                mode: 'cors', // no-cors, cors, *same-origin
+                cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+                credentials: 'same-origin', // include, *same-origin, omit
+                headers: {
+                    'Content-Type': 'application/json',
+                    // 'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                redirect: 'follow', // manual, *follow, error
+                referrer: 'no-referrer', // no-referrer, *client
+                body: JSON.stringify(data), // body data type must match "Content-Type" header
+            })
+            .then(response => response.json()); // parses JSON response into native JavaScript objects 
+        }
+        var similar_map = {}
+        function signUp(){
+            track_ids = []
+            for (var i = 0; i < $(".business-tile-selected").length; i++) {
+                track_ids.push($(".business-tile-selected")[i].id)
+            }
+            submission = {
+                "email": $("#email").val(),
+                "primary_events": $("#primary_events").prop("checked"),
+                "attribute_updates": $("#attribute_updates").prop("checked"),
+                "reviews": $("#reviews").prop("checked"),
+                "search_ranks": $("#search_ranks").prop("checked"),
+                "business_id": '{{{business._id}}}',
+                "track_ids": track_ids,
+                "marketing_lead_id": '{{{marketing_lead_id}}}'
+            }
+            postData('/signup.json', submission)
+              .then(data => console.log(JSON.stringify(data))) // JSON-string from `response.json()` call
+              .catch(error => console.error(error));
+            $("#lookup_results").collapse("hide")
+            $("#similarity_results").collapse("hide")
+            $("#sign_up").collapse("hide")
+            $("#thank_you").collapse("show")
+            qp('track', 'CompleteRegistration');
+        }
+        function setupEmail(){
+            $("#similarity_results").collapse("hide")
+            $("#lookup_results").collapse("hide")
+            $("#sign_up").collapse("show")
+            $("#competitor_count").html($(".business-tile-selected").length)
+        }
+        function toggleBusinessSelected(business_id){
+            existing_classes = $("#"+business_id).attr("class").split(' ');
+            if (existing_classes.indexOf("business-tile-selected") == -1){
+                $("#"+business_id).addClass("business-tile-selected")
+            } else {
+                $("#"+business_id).removeClass("business-tile-selected")
+            }
+        }
+        function coordString(){
+            if (geolocation != null){
+                return (Math.round(geolocation.coords.latitude*10)/10).toString()+", "+(Math.round(geolocation.coords.longitude*10)/10).toString()
+            } else{
+                return ""
+            }
+        }
+        $('#sign_up_finish').on('submit',function (e) {
+            e.preventDefault()
+        });
+        var companyLookup = new Bloodhound({
+          datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+          queryTokenizer: Bloodhound.tokenizers.whitespace,
+            remote: {
+                url: '/lookup_business.json?name=%QUERY&location={{{business.location}}}',
+                wildcard: '%QUERY',
+                filter: function (parsedResponse) {
+                    // parsedResponse is the array returned from your backend
+                    response_data = []
+                    parsedResponse.forEach(function func(i, ii){
+                        category_list = ""
+                        i.categories.forEach(function func(ij, ii){
+                            category_list = category_list+ij.title+", "
+                        })
+                        response_data.push({id: i.id["$oid"], name: i.name, location: i.location, category_list: category_list, url: i.url})
+                    })
+                    return response_data
+                }
+          },
+          template: '<p class="name">{{name}} -  {{location}}</p>',    
+        });
+        $('#remote .typeahead').typeahead(null, {
+          name: 'company-lookup',
+          templates: {
+            suggestion: function(data) {
+              return '<p><strong>' + data.name + '</strong> – ' + data.location + '</p>';
+            }
+          },
+          source: companyLookup
+        });
+        $('#remote .typeahead').bind('typeahead:select', function(ev, business) {
+            $("#similarity_results_table").prepend('<tr id="'+business.id+'" class="business-tile-selected">\n<td><input class="toggler" type="checkbox" checked data-toggle="toggle" data-size="xs" data-on="On " data-off="Off " id="'+business.id+'_button">\n</td>\n<td><a href="'+business.url.split("?")[0]+'"><b>'+business.name+'</b></a></td>\n<td>'+business.location+'</td>\n<td>'+business.category_list.slice(0, -2)+'</td>\n</tr>')
+            $("#"+business.id+" .toggler").bootstrapToggle();
+            $("#"+business.id+" .toggler").change(function() {
+                toggleBusinessSelected(this.parentElement.parentElement.parentElement.id)
+            })
+            similar_map[business.id] = business
+        });
+        $('#remote .typeahead').bind('typeahead:close', function(ev, suggestion) {
+            ev.preventDefault()
+            $(this).val("")
+            $(this).attr('value', ""); 
+            ev.preventDefault()
+        });
+        $('#remote .typeahead').bind('typeahead:idle', function(ev, suggestion) {
+            ev.preventDefault()
+            $(this).val("")
+            $(this).attr('value', ""); 
+            ev.preventDefault()
+        });
+    </script>
+    </div>
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <footer class="footer py-5 bg-black">
+      <div class="container">
+        <span class="text-muted">Questions? <a class="secondary" href="mailto:hello@localet.club">Contact us</a>. | <a class="secondary" href="/privacy">Privacy Policy</a> | <a class="secondary" href="/">Home</a></span>
+      </div>
+    </footer>
+    <!-- begin olark code -->
+    <script type="text/javascript" async> ;(function(o,l,a,r,k,y){if(o.olark)return; r="script";y=l.createElement(r);r=l.getElementsByTagName(r)[0]; y.async=1;y.src="//"+a;r.parentNode.insertBefore(y,r); y=o.olark=function(){k.s.push(arguments);k.t.push(+new Date)}; y.extend=function(i,j){y("extend",i,j)}; y.identify=function(i){y("identify",k.i=i)}; y.configure=function(i,j){y("configure",i,j);k.c[i]=j}; k=y._={s:[],t:[+new Date],c:{},l:a}; })(window,document,"static.olark.com/jsclient/loader.js");
+    /* custom configuration goes here (www.olark.com/documentation) */
+    olark.identify('8069-927-10-5099');</script>
+    <!-- end olark code -->
+    <!-- DO NOT MODIFY -->
+  </body>
+</html>
+
+
+<!-- <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+<input type="hidden" name="cmd" value="_s-xclick">
+<input type="hidden" name="hosted_button_id" value="3HWG3Q2HXDRPW">
+<input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_subscribeCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
+<img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
+</form> -->
+
+<!-- <A HREF="https://www.paypal.com/cgi-bin/webscr?cmd=_subscr-find&alias=8WP45W6DKZ5YA">
+<IMG SRC="https://www.paypalobjects.com/en_US/i/btn/btn_unsubscribe_LG.gif" BORDER="0">
+</A> -->

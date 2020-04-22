@@ -1,0 +1,6 @@
+Sitemap: https://www.localet.club/sitemap.xml
+User-agent: *
+Disallow: /files/
+Disallow: /css/
+Disallow: /scss/
+Disallow: /img/

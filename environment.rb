@@ -15,6 +15,7 @@ require 'dgaff'
 require 'diff/lcs'
 require 'jaro_winkler'
 Mongoid.load!("mongoid.yml", :development)
+Stripe.api_key = SETTINGS["stripe_secret"]
 SETTINGS=JSON.parse(File.read("settings.json"))
 $redis = Redis.new
 Dir[File.dirname(__FILE__) + '/handlers/*.rb'].each {|file| require file }
