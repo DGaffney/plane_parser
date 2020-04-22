@@ -1,10 +1,11 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <script>qp('track', 'Generic');</script>
+      <script src="https://js.stripe.com/v3/"></script>
       <!-- Global site tag (gtag.js) - Google Analytics -->
       <script async src="https://www.googletagmanager.com/gtag/js?id=UA-164240664-1"></script>
       <script>
+        var stripe = Stripe('pk_test_jNs3EAozrEhu4yPSLdXrnQeZ');
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
@@ -77,85 +78,28 @@
                   <tbody id="results_table" class="collapse">
                   </tbody>
                 </table>
+                <form id="validate_search_form" >
+                  <input type="hidden" id="search_url_input" name="search_url" value="">
+                  <button id="validate_search_submit" type="submit" class="submit btn btn-primary">Looks Good!</button>
+                </form>
             </div>
-            <div id="lookup_results_hold" class="collapse">
-              <div class="d-flex justify-content-center">
-                <div class="spinner-grow primary" role="status">
-                  <span class="sr-only">Loading...</span>
-                </div>
-              </div>
-            </div>
-            <div id="similarity_results" class="collapse">
+            <div id="add_email" class="collapse">
                 <br />
-                <h3>Step 2: Who do you want to track?</h3>
-                <p><em>Identify the companies you compete with, and would like to listen in on for any interesting developments</em></p>
-                <h5>We think that these companies have similar customer bases to <span id="inline_company_name"></span> - deselect any you disagree with.</h5>
-                <br />
-                <div id="similarity_results_table_holder">
-                    <div id="similarity_results_lookup_form">
-                    </div>
-                    <br />
-                    <table class="table">
-                      <thead>
-                        <tr>
-                          <th scope="col"></th>
-                          <th scope="col">Business Name</th>
-                          <th scope="col">Location</th>
-                          <th scope="col">Categories</th>
-                        </tr>
-                      </thead>
-                      <tbody id="similarity_results_table">
-                      </tbody>
-                    </table>
-                    <div id="post_similarity_bucket"></div>
-                </div>
-            </div>
-            <div id="sign_up" class="collapse">
-                <br />
-                <h3>Step 2: Who do you compete with?</h3>
-                <p><em>Identify the companies you compete with, and would like to listen in on for any interesting developments</em></p>
-                <h5><span id="company_selected_text"></span></h5>
-                <h3>Step 3: What do you want to hear about?</h3>
-                <p><em>Tell us the email you'd like to receive updates with, and tell us which types of updates most interest you</em></p>
-                <h5>Almost done - just tell us your email address and check the final settings and we'll be good to go.</h5>
-                <form id="sign_up_finish" >
-                      <label>What's your email?</label>
-                      <input id="email" type="email" class="form-control" placeholder="name@example.com">
-                      <br />
-                      <p>What sorts of emails do you want?</p>
-                      <div class="form-group">
-                          <div class="form-check">
-                              <input class="form-check-input" type="checkbox" value="" id="primary_events" checked>
-                              <label class="form-check-label" for="primary_events">
-                                Big news like shop closures
-                              </label>
-                          </div>
-                      </div>
-                      <div class="form-group">
-                          <div class="form-check">
-                              <input class="form-check-input" type="checkbox" value="" id="attribute_updates" checked>
-                              <label class="form-check-label" for="attribute_updates">
-                                Tweaks on company profiles
-                              </label>
-                          </div>
-                      </div>
-                      <div class="form-group">
-                          <div class="form-check">
-                              <input class="form-check-input" type="checkbox" value="" id="reviews" checked>
-                              <label class="form-check-label" for="reviews">
-                                Interesting reviews that customers left
-                              </label>
-                          </div>
-                      </div>
-                      <div class="form-group">
-                          <div class="form-check">
-                              <input class="form-check-input" type="checkbox" value="" id="search_ranks" checked>
-                              <label class="form-check-label" for="search_ranks">
-                                Shifts in search result rankings
-                              </label>
-                          </div>
-                      </div>
-                      <button type="submit" class="submit btn btn-primary btn-lg" onclick="signUp()">Sign me up</button>
+                <h5>Does this search look right?</h5>
+                <em>URL: </em><span id="search_url_confirm"></span>
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th scope="col">Search Parameter</th>
+                      <th scope="col">Search Value</th>
+                    </tr>
+                  </thead>
+                  <tbody id="results_table" class="collapse">
+                  </tbody>
+                </table>
+                <form id="validate_search_form" >
+                  <input type="hidden" id="search_url_input" name="search_url" value="">
+                  <button id="validate_search_submit" type="submit" class="submit btn btn-primary">Looks Good!</button>
                 </form>
             </div>
             <div id="thank_you" class="collapse">
@@ -170,6 +114,9 @@
                 var mq = window.matchMedia("only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (-o-min-device-pixel-ratio: 2.6/2), only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen  and (min-device-pixel-ratio: 1.3), only screen and (min-resolution: 1.3dppx)");
                 return (mq && mq.matches || (window.devicePixelRatio > 1)); 
             }
+        }
+        function getEmail(){
+          
         }
         function sendAlert(alertDialog){
           $("#error_container").html('<br /><div id="error_box" class="alert alert-warning alert-dismissible fade hide" role="alert">'+alertDialog+'<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>')
@@ -186,6 +133,7 @@
             $("#results_table").html(search_results_table)
             $("#results_table").collapse("show")
             $("#search_url_confirm").html("<a href='"+results.search_url+"'>"+results.search_url+"</a>")
+            $("#search_url_input").value(results.search_url)
           }
           
         }
@@ -218,7 +166,20 @@
               behavior: 'smooth'
             });
         });
-            
+        $('#validate_search_submit').on('submit',function (e) {
+            e.preventDefault()
+            stripe.redirectToCheckout({
+              // Make the id field from the Checkout Session creation API response
+              // available to this file, so you can provide it as parameter here
+              // instead of the {{CHECKOUT_SESSION_ID}} placeholder.
+              sessionId: '{{CHECKOUT_SESSION_ID}}'
+            }).then(function (result) {
+              // If `redirectToCheckout` fails due to a browser or network
+              // error, display the localized error message to your customer
+              // using `result.error.message`.
+            });
+        });
+        
     </script>
     </div>
     <br />
