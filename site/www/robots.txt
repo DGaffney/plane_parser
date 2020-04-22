@@ -1,4 +1,4 @@
-Sitemap: https://www.localet.club/sitemap.xml
+Sitemap: https://www.tapdeals.cognitivesurpl.us/sitemap.xml
 User-agent: *
 Disallow: /files/
 Disallow: /css/
