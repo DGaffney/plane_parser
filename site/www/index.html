@@ -235,7 +235,7 @@
               $("#lookup_results").collapse("show")
               drawAuctionPrediction(results);
               fillInAuction(results);
-              window.history.replaceState("", "TAP Deals", "/?search_url="+results.search_url);
+              window.history.replaceState("", "TAP Deals", "/?search_url="+encodeURIComponent(results.search_url));
             }
           })
         }
