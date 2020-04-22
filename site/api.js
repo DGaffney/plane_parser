@@ -5,7 +5,7 @@ const requestprom = require('request-promise')
 
 function get(path, callback) {
   request({
-    url: "http://"+config.api_host+":9292/"+path,
+    url: "https://"+config.api_host+":9292/"+path,
     json: true
   }, function (error, response, body) {
     if (error || response.statusCode !== 200) {
