@@ -15,9 +15,9 @@ require 'string-similarity'
 require 'dgaff'
 require 'diff/lcs'
 require 'jaro_winkler'
+SETTINGS=JSON.parse(File.read("settings.json"))
 Mongoid.load!("mongoid.yml", :development)
 Stripe.api_key = SETTINGS["stripe_secret"]
-SETTINGS=JSON.parse(File.read("settings.json"))
 $redis = Redis.new
 Dir[File.dirname(__FILE__) + '/handlers/*.rb'].each {|file| require file }
 Dir[File.dirname(__FILE__) + '/extensions/*.rb'].each {|file| require file }
