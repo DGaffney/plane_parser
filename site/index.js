@@ -48,7 +48,7 @@ app.get('/image/:email_id', (req, res) => {
   }
 })
 app.get("/parse_search_page.json", function(req, res) {
-    api.parse_search_page(req.query.url, function(body){
+    api.parse_search_page(req.query.search_url, function(body){
         res.send(body)
     })
 })
