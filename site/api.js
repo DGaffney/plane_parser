@@ -1,4 +1,4 @@
-var config = require('../api/settings.json');
+var config = require('../settings.json');
 var qs = require('querystring')
 const request = require('request');
 const requestprom = require('request-promise')

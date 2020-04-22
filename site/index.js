@@ -37,8 +37,8 @@ app.get('/image/:email_id', (req, res) => {
       res.writeHead(200, {
       'Content-Type': 'image/gif',
       'Content-Length': trackImg.length
-    })
-    const { email_id } = req.params
+    });
+    const email_id = req.params
     config = req.query.config
     api.track_open(email_id, config, function(body){
         res.end(trackImg)
