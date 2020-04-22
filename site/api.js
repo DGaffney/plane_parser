@@ -57,13 +57,13 @@ module.exports = {
       })
   },
   store_email_config: function (email_config, callback) {
-      post("api/store_email_config.json", email_config, function(err, body){
+      post("store_email_config.json", email_config, function(err, body){
           callback(body)
       })
   },
   parse_search_page: function (search_url, callback) {
       search_url = search_url || ""
-      get("api/parse_search_page.json?search_url="+search_url, function(err, body){
+      get("parse_search_page.json?search_url="+search_url, function(err, body){
           callback(body)
       })
   },

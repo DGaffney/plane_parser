@@ -1,4 +1,11 @@
 class Site < Sinatra::Base
+  get "/parse_search_page.json" do
+    search_url = URI.parse(params[:search_url]) rescue nil
+    return {error: "Error! Can't parse url that looks like: #{params[:search_url]}. Please provide a Trade-A-Plane search results URL"}.to_json if search_url.nil? || !search_url.host.include?("trade-a-plane.com")
+    return {error: "Please provide a Trade-A-Plane search URL"}.to_json if search_url.path != "/search"
+    return {search_params: URI.decode_www_form(search_url.query), search_url: search_url.to_s}.to_json
+  end
+
   get "/get_prediction.json" do
     if (cp = CachedPrediction.where(listing_id: params[:listing_id]).first)
       cp.hits += 1
