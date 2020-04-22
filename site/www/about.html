@@ -42,34 +42,35 @@
       </div>
     </div>
   </header>
-    <section id="how_works_main" role="main" class="flex-shrink-0 collapse">
+    <section id="how_works_main" role="main" class="flex-shrink-0">
         <div class="container">
             <br />
             <div class="row">
               <div class="col">
                 <h2 class="text-center primary">How @TAP_Deals uses machine learning to automatically detect undervalued planes</h2>
                 <p><a href="https://twitter.com/tap_deals">@TAP_deals</a> is a bot on Twitter that uses machine learning to extrapolate the estimated value of a plane based on historical trends from listings of all other planes on Trade-a-Plane.com. While the code underpinning the Twitter bot constantly evaluates all planes listed at Trade-a-Plane.com, it only Tweets out planes that are undervalued at 5% or more of the list price in order to surface only the most interesting listings. For the data folks out there, The R² of the predictions that the TAP_deals bot generates hovers around 0.77, and the model is particularly predictive for low cost single and multi-engine piston planes with two to six seats (since there’s many observations in this part of the market). To get a better sense of the current state of the <a href="https://twitter.com/tap_deals">@TAP_deals</a> bot, read on!</p>
+                <br />
+                <br />
                 <p>In many cases, the listing price of a plane is aspirational on the part of the seller — there’s of course many serious sellers with realistic prices, or companies selling planes as a business, but there’s just as many folks “testing the waters” for selling their plane. I recall a story I read online once where someone had a plane listed for ≈$40k but ended up selling for $20k cash no questions asked on a whim — in my own experience, I’ve talked to sellers arguing for $37,000 who flipped to $30,000 as soon as they thought they may have me on the hook, but I was losing interest. Because of this, the goal of this model is to, as accurately as possible, reflect the actual value of a plane instead of working off of the listing price — while a model that perfectly reflected listing prices would be potentially interesting, it’s certainly not nearly as useful as one that predicts the value of a plane relative to how the rest of the market operates.</p>
-                <h4>Pricing Model<h4>
-
-
+                <h4>Pricing Model</h4>
                 <figure class="figure">
                   <img src="/img/0_sKani6e_khloZEmt.jpeg" class="figure-img img-fluid rounded" alt="Log(Price) predictions for single engine piston planes from Piper, Cessna, Beechcraft, and Mooney">
                   <figcaption class="figure-caption">Log(Price) predictions for single engine piston planes from Piper, Cessna, Beechcraft, and Mooney</figcaption>
                 </figure>
-                
-
+                <br />
+                <br />
                 <figure class="figure">
                   <img src="/img/0_syk3wrPewDtiDg0A.jpeg" class="figure-img img-fluid rounded" alt="Price predictions for single engine piston planes from Piper, Cessna, Beechcraft, and Mooney">
                   <figcaption class="figure-caption">Price predictions for single engine piston planes from Piper, Cessna, Beechcraft, and Mooney</figcaption>
                 </figure>
-                
-
+                <br />
                 <p>Currently, there’s about 15,000 planes in the dataset that the model trains on, and each observation is converted into several hundred variables. Some of them are obvious such as the make, model, year, SMOH, and so forth — these are the core characteristics of planes and account for a huge amount of the variation of the net value. In cases where listings may not specify things such as SMOH, total hours, the year of the plane and so forth, those numbers are imputed by looking at other similar planes and choosing the average value for planes matching the other known characteristics of the plane.</p>
 
-                <h4>Avionics Matching<h4>
+                <br />
+                <h4>Avionics Matching</h4>
                 <p>Beyond the “bare bones” of a plane, another huge driver for cost is what’s inside the cockpit. In the part of the market I pay most attention to (Cherokee 180’s and Beechcraft Sundowners/Sierra’s), the difference between a bare-bones stock plane from the 1960’s and a fully updated cockpit can be the difference between a $28,000 plane and a $78,000 plane. Obviously, this is something that is missed when you just take into account the basics of a plane’s stats, and as a result, estimates on the value of a plane are going to be way off if these aren’t taken into account. There’s one huge problem with accounting for this information, however — on Trade-a-Plane, it’s represented as a free-form text box — here’s the equipment list from a plane, for example:</p>
 
+                <br />
 
                 <figure class="figure">
                   <img src="/img/1_rhMsKx-fDRe1OIvsJYy3rw.png" class="figure-img img-fluid rounded" alt="100% free form, 100% free-for-all">
@@ -84,6 +85,7 @@
                   <img src="/img/1_njjsL5UcNAjvBM1d.jpeg" class="figure-img img-fluid rounded" alt="Internal vetting for matching free-form avionic listings to canonical avionic references">
                   <figcaption class="figure-caption">Internal vetting for matching free-form avionic listings to canonical avionic references</figcaption>
                 </figure>
+                <br />
                 
                 <p>Once matched, we now have a “canonical” avionic reference for the free form text — we can now directly compare two planes as a result (i.e. we know that both of these planes have GPSes, one a Garmin brand and one not — what is the marginal increase in listed price for the Garmin brand name above Apollo?). In practice, this avionics matching code can correctly match free-form text to the actual avionic in about 84% of the cases we observe.</p>
                 
@@ -94,6 +96,7 @@
                   <figcaption class="figure-caption">Flowchart for how we estimate the price of planes on Trade-a-Plane</figcaption>
                 </figure>
                 
+                <br />
                 <p>To the extent that our price differs from the listed price, this represents the degree to which the plane appears to be over or under-valued. Of course, this is our opinion about the price rather than ground truth about the degree to which the plane is off-base on it’s listing price. A plane is worth however much money a buyer will pay for it. The estimate our model provides, however, comes from a principled data-science perspective, is generally in line with most prices of most planes, and when it differs, from qualitative review, a fair number of those differences look to be picking up on some interesting trends. Next steps for this system include improving the accuracy of the avionics matcher, re-targeting labels to only planes that appear to have been sold rather than all planes listed (i.e. reflect likely sale price rather than listing price), and toying with increasingly sophisticated ML models for estimating the plane price. In the meantime, however, we will continue to list out planes that seem undervalued in order to cut down on spending way too much time searching through listings.</p>
               </div>
            </div>
