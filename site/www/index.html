@@ -40,59 +40,9 @@
       </div>
     </div>
   </header>
-    <section id="how_works_main" role="main" class="flex-shrink-0 collapse">
-        <div class="container">
-            <br />
-            <div class="row">
-              <div class="col">
-                <h2 class="text-center primary">How TAP Deals Works</h2>
-                <h5 style="line-height:1.5em">TAP Deals leverages a unique data pipeline and artificial intelligence model to identify underpriced aircraft on the Trade-A-Plane marketplace. Our software constantly monitors changes in the market, identifies the best deals, and sends them directly to your mailbox for you to take advantage of them. Add this tool to your aircraft search process and help inform your decision for just $1 a month per search configuration.</h5>
-              </div>
-           </div>
-            <br />
-            <br />
-            <div class="row">
-              <div class="col">
-                  <h3 class="primary">Step 1: Who are you tracking updates for?</h3>
-                  <p>Localet builds your profile by starting with a single company - it can be your own business, or simply one that's emblematic of the businesses you want to track. We'll then put together a short list of companies that compete around that seed business.</p>
-              </div>
-              <div class="col align-middle text-center">
-                  <i class="fas fa-search-location fa-10x"></i>
-              </div>
-            </div>
-            <br />
-            <br />
-            <br />
-            <div class="row">
-              <div class="col">
-                <i class="fas fa-store fa-6x" style="margin-right:0.25em"></i>
-                <i class="fas fa-store-alt fa-6x" style="margin-right:0.25em"></i>
-                <i class="fas fa-store fa-6x"></i>
-              </div>
-              <div class="col">
-                <h3 class="primary">Step 2: Who do you want to track?</h3>
-                  <p>We'll try our best to come up with a great short list of candidates, but you should have an opportunity to weigh in. Add or remove any other companies you'd like to finish rounding out the tracker. We'll then pervasively monitor the internet for any observable changes involving these companies.</p>
-              </div>
-            </div>
-            <br />
-            <br />
-            <br />
-            <div class="row">
-              <div class="col">
-                <h3 class="primary">Step 3: What do you want to hear about?</h3>
-                <p>Choose the types of events you want to keep track of. Right now, we break those events down into four groups:</p>
-                <ul>
-                    <li><b>Big news</b> like shop closures, major rebrands, and recategorizations of what services the company offers.</li>
-                    <li><b>Profile tweaks</b> like changes in open hours, overall service ratings, price bracket, and senior staff.</li>
-                    <li><b>New reviews</b> across services like Yelp, TripAdvisor, and OpenTable.</li>
-                    <li><b>Rank changes</b> for popular searches in which the companies tracked might show up.</li>
-                </ul>
-              </div>
-              <div class="col align-middle text-center">
-                <i class="fas fa-envelope-open-text fa-10x"></i>
-              </div>
-            </div>
-        </div>
+    <section>
+      <div id="error_container" class="container">
+      </div>
     </section>
     <section id="try_now_main" role="main" class="flex-shrink-0 collapse show">
         <div class="container">
@@ -115,17 +65,17 @@
             </div>
             <div id="lookup_results" class="collapse">
                 <br />
-                <h5>Which Business were you looking for?</h5>
+                <h5>Does this search look right?</h5>
+                <em>URL: </em><span id="search_url_confirm"></span>
                 <table class="table">
                   <thead>
                     <tr>
                       <th scope="col"></th>
-                      <th scope="col">Business Name</th>
-                      <th scope="col">Location</th>
-                      <th scope="col">Categories</th>
+                      <th scope="col">Search Parameter</th>
+                      <th scope="col">Search Value</th>
                     </tr>
                   </thead>
-                  <tbody id="lookup_results_table" class="collapse">
+                  <tbody id="results_table" class="collapse">
                   </tbody>
                 </table>
             </div>
@@ -222,9 +172,27 @@
                 return (mq && mq.matches || (window.devicePixelRatio > 1)); 
             }
         }
+        function sendAlert(alertDialog){
+          $("#error_container").html('<br /><div id="error_box" class="alert alert-warning alert-dismissible fade hide" role="alert">'+alertDialog+'<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>')
+          $("#error_box").collapse("show")
+        }
+        function drawSearchConfirm(results){
+          if (results.error){
+            sendAlert(results.error)
+          } else {
+            search_results_table = ""
+            for (i = 0; i < results.search_params; i++) {
+              search_results_table += "<tr><td><em>"+results.search_params[i][0]+"</em></td><td>"+results.search_params[i][1]+"</td></tr>"
+            }
+          }
+          var i;
+          $("#results_table").html(search_results_table)
+          $("#search_url_confirm").html("<a href='"+results.search_url+"'>"+results.search_url+"</a>")
+          
+        }
         function validateSearch(){
-          url = $("#url")[0].value
-          fetch('/get_prediction.json?page_url='+url)
+          url = encodeURIComponent($("#url")[0].value)
+          fetch('/parse_search_page.json?search_url='+url)
           .then(function(response) {
             return response.json();
           }).then(function(results) {
@@ -233,9 +201,8 @@
             } else {
               $("#lookup_url").collapse("hide")
               $("#lookup_results").collapse("show")
-              drawAuctionPrediction(results);
-              fillInAuction(results);
-              window.history.replaceState("", "TAP Deals", "/?search_url="+encodeURIComponent(results.search_url));
+              drawSearchConfirm(results)
+              window.history.replaceState("", "TAP Deals", "/?search_url="+url);
             }
           })
         }
