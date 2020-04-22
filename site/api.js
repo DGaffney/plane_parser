@@ -61,9 +61,9 @@ module.exports = {
           callback(body)
       })
   },
-  lookup_business: function (search_term, loc, callback) {
-      loc = loc || ""
-      get("api/lookup_business.json?name="+search_term+"&location="+loc, function(err, body){
+  parse_search_page: function (search_url, callback) {
+      search_url = search_url || ""
+      get("api/parse_search_page.json?search_url="+search_url, function(err, body){
           callback(body)
       })
   },

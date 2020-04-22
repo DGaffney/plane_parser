@@ -1,3 +1,4 @@
+require 'stripe'
 require 'pry'
 require 'twitter'
 require 'pycall/import'
