@@ -57,20 +57,15 @@ app.get("/start_signup.json", function(req, res){
 
   stripe.checkout.sessions.create(
     {
-      success_url: 'https://example.com/success',
-      cancel_url: 'https://example.com/cancel',
+      success_url: 'https://tapdeals.cognitivesurpl.us/success?session_id={CHECKOUT_SESSION_ID}',
+      cancel_url: 'https://tapdeals.cognitivesurpl.us/cancel',
       payment_method_types: ['card'],
-      line_items: [
-        {
-          name: 'T-shirt',
-          description: 'Comfortable cotton t-shirt',
-          amount: 1500,
-          currency: 'usd',
-          quantity: 2,
-        },
-      ],
+      line_items: [{
+        plan: api.settings.email_subscription_product_id,
+      }],
     },
     function(err, session) {
+      console.log(session)
       res.send(session)
     }
   );
