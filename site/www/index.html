@@ -79,17 +79,103 @@
                   <tbody id="results_table" class="collapse">
                   </tbody>
                 </table>
-                <body>
-                  <form id="subscription-form">
-                    <div id="card-element" class="MyCardElement">
-                      <!-- Elements will create input elements here -->
+                <!--START-->
+                <form id="payment-form">
+                    <div class="card">
+                      <div class="card-body">
+
+                        <div class="card-title">
+                          <h4 class="header-uppercase header-blue">
+                            {{ plan.nickname }}
+                          </h4>
+                          <h2 class="price">{{ plan.amount }} 
+                            <span>
+                              / 
+                              {% if (plan.interval_count > 1) %} 
+                                {{ plan.interval_count }} {{ plan.interval }}s
+            
+                              {% else %}
+                                {{ plan.interval }}
+                              {% endif %}
+                            </span>
+                          </h2>
+                        </div>
+
+                        <!-- INPUTS -->
+                        <input id="plan" type="hidden" value="{{ plan.formatted }}" name="plan"/>
+                        <input id="customerName"
+                          name="name"
+                          required="true"
+                          placeholder="Name" />
+                        <input id="customerEmail"
+                          name="email"
+                          type="email"
+                          required="true"
+                          placeholder="Email"/>
+    
+                        <div id="card-element">
+                          <!-- Stripe Elements will be mounted here -->
+                        </div>
+    
+                        <div id="card-errors" role="alert">
+                          <!-- Any Stripe Elements error messages will be mounted here -->
+                        </div>
+                      </div>
+
+                      <!-- FORM SUBMISSION -->
+                      <button
+                      class="card-btn"
+                      type="submit">Pay Now</button>
+                    </div>
+                  </form>
+
+                  <!-- LOADING STATE -->
+                  <div id="loading" class="card card-centered hide">
+                    <div class="card-body">
+                      <div>
+                        <div class="loader"></div>
+                      </div>
+      
+                      <h3 class="header-blue">Processing <br> your payment...</h3>
+                      <p class="helper-text">Please wait a few minutes!</p>
+                    </div>
+                  </div>
+
+                  <!-- SUCCESS STATE -->
+                  <div id="success" class="card card-centered hide">
+                    <div class="card-body">
+                      <i class="success-icon fas fa-check-circle"></i>
+                      <h3 class="header-blue">
+                        Congrats, you’ve <br> successfully registered!
+                      </h3>
+                      <p class="helper-text">
+                        Log in to the app to start creating your first survey!
+                      </p>
                     </div>
 
-                    <!-- We'll put the error messages in this element -->
-                    <div id="card-errors" role="alert"></div>
-                    <button type="submit">Subscribe</button>
-                  </form>
-                </body>
+                    <a href="/" class="card-btn">
+                      Log In
+                    </a>
+                  </div>
+
+                  <!-- ERROR STATE -->
+                  <div id="error" class="card card-centered hide">
+                    <div class="card-body">
+                      <i class="error-icon fas fa-exclamation-circle"></i>
+                      <h3 class="header-red">
+                        Sorry, it looks like <br> something went wrong
+                      </h3>
+                      <p class="helper-text">
+                        Please contact us or try again.
+                      </p>
+                    </div>
+
+                    <a href="/" class="card-btn">
+                      Contact Us
+                    </a>
+                  </div>
+                
+                <!--END-->
                 <form id="validate_search_form" >
                   <input type="hidden" id="search_url_input" name="search_url" value="">
                   <button id="validate_search_submit" type="submit" class="submit btn btn-primary">Looks Good!</button>
