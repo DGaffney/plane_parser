@@ -39,6 +39,8 @@
       <div class="container">
         <h1 class="masthead-heading mb-0">TAP Deals</h1>
         <h3 class="mb-0">AI-powered aircraft market analysis</h3>
+        <div id="how_works_button" class="collapse"><a onclick="flipHowWorks()" class="btn btn-primary btn-xl rounded-pill mt-5" style="cursor:pointer;">How it Works</a></div>
+        <div id="try_now_button" class="collapse show"><a onclick="flipTryNow()" class="btn btn-primary btn-xl rounded-pill mt-5" style="cursor:pointer;">Try it Now</a></div>
       </div>
     </div>
   </header>
@@ -46,7 +48,14 @@
       <div id="error_container" class="container">
       </div>
     </section>
-    <section id="try_now_main" role="main" class="flex-shrink-0 collapse show">
+    <a class="twitter-timeline" href="https://twitter.com/tap_deals?ref_src=twsrc%5Etfw">Tweets by tap_deals</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+    <section id="how_works_main" role="main" class="flex-shrink-0 collapse">
+      <div class="container">
+        <div class="row">
+        </div>
+      </div>
+    </section>
+    <section id="try_now_main" role="main" class="flex-shrink-0 collapse">
         <div class="container">
             <br />
             <h3>Step 1: What TAP Search Page do you want us to check?</h3>
@@ -92,6 +101,7 @@
                         
                           <input id="plan" type="hidden" value="plan_H9C2xO18zlLFak" name="plan"/>
                           <input id="customerName" name="customerName" type="text" class="form-control" placeholder="Name">
+                          <br />
                           <input id="customerEmail" name="customerEmail" type="text" class="form-control" placeholder="Email">
                           <div id="card-element">
                             <!-- Stripe Elements will be mounted here -->
@@ -281,7 +291,7 @@
             fontSmoothing: "antialiased",
             fontSize: "16px",
             "::placeholder": {
-              color: "#6099EE",
+              color: "#3a1c71",
               textTransform: "uppercase",
             },
           },
@@ -408,6 +418,31 @@
             showState('success');
           }
         }
+        function flipHowWorks(){
+            $("#how_works_button").collapse("hide")
+            $("#try_now_button").collapse("show")
+            $("#try_now_main").collapse("hide")
+            $("#how_works_main").collapse("show")
+            window.history.replaceState("", "TAP Deals", "/");
+        }
+        function flipTryNow(){
+            $("#try_now_button").collapse("hide")
+            $("#how_works_button").collapse("show")
+            $("#how_works_main").collapse("hide")
+            $("#try_now_main").collapse("show")
+            window.history.replaceState("", "TAP Deals", "/?try_now=true");
+            provideSuggestions()
+        }
+        window.onload = function() {
+          urlParams = new URLSearchParams(window.location.search);
+          if (urlParams.get("search_url")){
+            $("#url").val(urlParams.get("search_url"))
+            validateSearch()
+          } else if (urlParams.get("try_now")) {
+            flipTryNow()
+          }
+        };
+        
     </script>
     </div>
     <br />
