@@ -58,7 +58,7 @@ app.get("/parse_search_page.json", function(req, res) {
         } else if (search_url.search.indexOf("s-type=aircraft") == -1){
           return res.json({error: "Please provide a Trade-A-Plane search URL for aircraft only - this search doesn't look to be for aircraft."})
         } else {
-          return res.json({search_params: Array.from(search_url.searchParams), search_url: String(search_url)}.to_json)
+          return res.json({search_params: Array.from(search_url.searchParams), search_url: String(search_url)})
         }
     }
     catch(error) {
