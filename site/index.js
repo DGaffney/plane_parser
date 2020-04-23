@@ -54,7 +54,7 @@ app.get("/parse_search_page.json", function(req, res) {
     })
 })
 app.post('/handlePayment', async (req, res) => {
-  const parsedPlan = JSON.parse(req.body.plan);
+  const parsedPlan = JSON.parse(req.body.plan_id);
 
   const customerInfo = {
     name: req.body.name,
