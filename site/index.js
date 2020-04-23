@@ -54,12 +54,10 @@ app.get("/parse_search_page.json", function(req, res) {
     })
 })
 app.post('/handlePayment', async (req, res) => {
-  const parsedPlan = JSON.parse(req.body.plan_id);
-
   const customerInfo = {
     name: req.body.name,
     email: req.body.email,
-    planId: parsedPlan.id,
+    planId: req.body.plan,
   };
 
   const subscription = await STRIPE_API.createCustomerAndSubscription(
