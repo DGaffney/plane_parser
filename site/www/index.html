@@ -66,90 +66,92 @@
                 </form>
             </div>
             <div id="lookup_results" class="collapse">
-                <br />
-                <h5>Does this search look right?</h5>
-                <em>URL: </em><span id="search_url_confirm"></span>
-                <table class="table">
-                  <thead>
-                    <tr>
-                      <th scope="col">Search Parameter</th>
-                      <th scope="col">Search Value</th>
-                    </tr>
-                  </thead>
-                  <tbody id="results_table" class="collapse">
-                  </tbody>
-                </table>
-                <!--START-->
-                <form id="payment-form">
-                    <div class="card">
-                      <div class="card-body">
+              <div class="row">
+                <div class="col-6">
+                  <br />
+                  <h5>Does this search look right?</h5>
+                  <em>URL: </em><span id="search_url_confirm"></span>
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th scope="col">Search Parameter</th>
+                        <th scope="col">Search Value</th>
+                      </tr>
+                    </thead>
+                    <tbody id="results_table" class="collapse">
+                    </tbody>
+                  </table>
+                </div>
+                <div class="col-6">
+                  <!--START-->
+                  <form id="payment-form collapse show">
+                      <div class="card">
+                        <div class="card-body">
 
-                        <!-- INPUTS plan_H95MyTZaOIY9fv -->
+                          <!-- INPUTS plan_H95MyTZaOIY9fv -->
                         
-                        <input id="plan" type="hidden" value="plan_H9C2xO18zlLFak" name="plan"/>
-                        <input id="customerName" name="customerName" type="text" class="form-control" placeholder="Name">
-                        <input id="customerEmail" name="customerEmail" type="text" class="form-control" placeholder="Email">
-                        <div id="card-element">
-                          <!-- Stripe Elements will be mounted here -->
-                        </div>
+                          <input id="plan" type="hidden" value="plan_H9C2xO18zlLFak" name="plan"/>
+                          <input id="customerName" name="customerName" type="text" class="form-control" placeholder="Name">
+                          <input id="customerEmail" name="customerEmail" type="text" class="form-control" placeholder="Email">
+                          <div id="card-element">
+                            <!-- Stripe Elements will be mounted here -->
+                          </div>
     
-                        <div id="card-errors" role="alert">
-                          <!-- Any Stripe Elements error messages will be mounted here -->
+                          <div id="card-errors" role="alert">
+                            <!-- Any Stripe Elements error messages will be mounted here -->
+                          </div>
                         </div>
-                      </div>
 
-                      <!-- FORM SUBMISSION -->
-                      <button id="start_subscription" type="submit" class="submit btn btn-primary">Start Subscription</button>
-                    </div>
-                  </form>
-
-                  <!-- LOADING STATE -->
-                  <div id="loading" class="card card-centered hide">
-                    <div class="card-body">
-                      <div>
-                        <div class="loader"></div>
+                        <!-- FORM SUBMISSION -->
+                        <button id="start_subscription" type="submit" class="submit btn btn-primary">Start Subscription</button>
                       </div>
+                    </form>
+
+                    <!-- LOADING STATE -->
+                    <div id="loading" class="card card-centered collapse hide">
+                      <div class="card-body">
+                        <div>
+                          <div class="loader"></div>
+                        </div>
       
-                      <h3 class="header-blue">Processing <br> your payment...</h3>
-                      <p class="helper-text">Please wait a few minutes!</p>
-                    </div>
-                  </div>
-
-                  <!-- SUCCESS STATE -->
-                  <div id="success" class="card card-centered hide">
-                    <div class="card-body">
-                      <i class="success-icon fas fa-check-circle"></i>
-                      <h3 class="header-blue">
-                        Congrats, you’ve <br> successfully registered!
-                      </h3>
-                      <p class="helper-text">
-                        Log in to the app to start creating your first survey!
-                      </p>
-                    </div>
-                  </div>
-
-                  <!-- ERROR STATE -->
-                  <div id="error" class="card card-centered hide">
-                    <div class="card-body">
-                      <i class="error-icon fas fa-exclamation-circle"></i>
-                      <h3 class="header-red">
-                        Sorry, it looks like <br> something went wrong
-                      </h3>
-                      <p class="helper-text">
-                        Please contact us or try again.
-                      </p>
+                        <h3 class="header-blue">Processing <br> your payment...</h3>
+                        <p class="helper-text">Please wait a few minutes!</p>
+                      </div>
                     </div>
 
-                    <a href="/" class="card-btn">
-                      Contact Us
-                    </a>
-                  </div>
+                    <!-- SUCCESS STATE -->
+                    <div id="success" class="card card-centered collapse hide">
+                      <div class="card-body">
+                        <i class="success-icon fas fa-check-circle"></i>
+                        <h3 class="header-blue">
+                          Congrats, you’ve <br> successfully registered!
+                        </h3>
+                        <p class="helper-text">
+                          Log in to the app to start creating your first survey!
+                        </p>
+                      </div>
+                    </div>
+
+                    <!-- ERROR STATE -->
+                    <div id="error" class="card card-centered collapse hide">
+                      <div class="card-body">
+                        <i class="error-icon fas fa-exclamation-circle"></i>
+                        <h3 class="header-red">
+                          Sorry, it looks like <br> something went wrong
+                        </h3>
+                        <p class="helper-text">
+                          Please contact us or try again.
+                        </p>
+                      </div>
+
+                      <a href="/" class="card-btn">
+                        Contact Us
+                      </a>
+                    </div>
                 
-                <!--END-->
-                <form id="validate_search_form" >
-                  <input type="hidden" id="search_url_input" name="search_url" value="">
-                  <button id="validate_search_submit" type="submit" class="submit btn btn-primary">Looks Good!</button>
-                </form>
+                  <!--END-->
+                </div>
+              </div>
             </div>
             <div id="add_email" class="collapse">
                 <!-- <br />
