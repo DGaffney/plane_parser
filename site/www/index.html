@@ -122,10 +122,11 @@
                           <input id="customerName" name="customerName" type="text" class="form-control" placeholder="Name">
                           <br />
                           <input id="customerEmail" name="customerEmail" type="text" class="form-control" placeholder="Email">
+                          <br />
                           <div id="card-element">
                             <!-- Stripe Elements will be mounted here -->
                           </div>
-    
+                          <br />
                           <div id="card-errors" role="alert">
                             <!-- Any Stripe Elements error messages will be mounted here -->
                           </div>
@@ -303,7 +304,6 @@
          */
         var elementsStyles = {
           base: {
-            marginTop: "20px",
             color: "#004ABB",
             iconColor: "#004ABB",
             fontFamily: "'Mukta', Helvetica, sans-serif",
@@ -450,8 +450,6 @@
             $("#how_works_button").collapse("show")
             $("#how_works_main").collapse("hide")
             $("#try_now_main").collapse("show")
-            window.history.replaceState("", "TAP Deals", "/?try_now=true");
-            provideSuggestions()
         }
         window.onload = function() {
           urlParams = new URLSearchParams(window.location.search);
