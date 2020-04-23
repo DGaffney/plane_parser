@@ -23,6 +23,7 @@ app.set('view engine', 'html');
 app.use(bodyParser.json());
 var http = require('http').Server(app);
 var api = require("./api.js")
+var stripe = require('stripe')(api.settings.stripe_secret);
 
 f = require('util').format,
 
@@ -53,9 +54,26 @@ app.get("/parse_search_page.json", function(req, res) {
     })
 })
 app.get("/start_signup.json", function(req, res){
-  api.start_signup(function(body){
-      res.send(body)
-  })
+
+  stripe.checkout.sessions.create(
+    {
+      success_url: 'https://example.com/success',
+      cancel_url: 'https://example.com/cancel',
+      payment_method_types: ['card'],
+      line_items: [
+        {
+          name: 'T-shirt',
+          description: 'Comfortable cotton t-shirt',
+          amount: 1500,
+          currency: 'usd',
+          quantity: 2,
+        },
+      ],
+    },
+    function(err, session) {
+      // asynchronously called
+    }
+  );
 })
 app.post("/signup.json", function(req, res){
     email_config = req.body

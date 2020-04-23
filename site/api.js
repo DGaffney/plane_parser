@@ -33,6 +33,7 @@ function post(path, data, callback){
 }
 
 module.exports = {
+  settings: config,
   ping: function (callback) {
       get("ping.json", function(err, body){
           callback(body)
@@ -63,11 +64,6 @@ module.exports = {
   },
   parse_search_page: function (search_url, callback) {
     post("parse_search_page.json", {"search_url": search_url}, function(err, body){
-          callback(body)
-      })
-  },
-  start_signup: function (callback) {
-    get("start_signup.json", function(err, body){
           callback(body)
       })
   },
