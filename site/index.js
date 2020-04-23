@@ -52,17 +52,17 @@ app.get("/parse_search_page.json", function(req, res) {
     try {
         var search_url = new URL(req.query.search_url)
         if (search_url.host != "trade-a-plane.com" && search_url.host != "www.trade-a-plane.com"){
-          res.json({error: "Error! This URL doesn't look like it's from Trade-A-Plane:"+req.query.search_url+". Please provide a Trade-A-Plane search results URL"})
+          res.send({error: "Error! This URL doesn't look like it's from Trade-A-Plane:"+req.query.search_url+". Please provide a Trade-A-Plane search results URL"})
         } else if (search_url.pathname != "/search"){
-          res.json({error: "Please provide a Trade-A-Plane search URL"})
+          res.send({error: "Please provide a Trade-A-Plane search URL"})
         } else if (search_url.search.indexOf("s-type=aircraft") == -1){
-          res.json({error: "Please provide a Trade-A-Plane search URL for aircraft only - this search doesn't look to be for aircraft."})
+          res.send({error: "Please provide a Trade-A-Plane search URL for aircraft only - this search doesn't look to be for aircraft."})
         } else {
-          res.json({search_params: Array.from(search_url.searchParams), search_url: search_url.to_s}.to_json)
+          res.send({search_params: Array.from(search_url.searchParams), search_url: search_url.to_s}.to_json)
         }
     }
     catch(error) {
-      res.json({error: "Error! Can't parse url that looks like:"+req.query.search_url+". Please provide a Trade-A-Plane search results URL"})
+      res.send({error: "Error! Can't parse url that looks like:"+req.query.search_url+". Please provide a Trade-A-Plane search results URL"})
     }
 })
 app.post('/handlePayment', async (req, res) => {
