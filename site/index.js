@@ -53,6 +53,23 @@ app.get("/parse_search_page.json", function(req, res) {
         res.send(body)
     })
 })
+app.post('/handlePayment', async (req, res) => {
+  const parsedPlan = JSON.parse(req.body.plan);
+
+  const customerInfo = {
+    name: req.body.name,
+    email: req.body.email,
+    planId: parsedPlan.id,
+  };
+
+  const subscription = await STRIPE_API.createCustomerAndSubscription(
+    req.body.paymentMethodId,
+    customerInfo,
+  );
+
+  return res.json({ subscription });
+});
+
 app.get("/start_signup.json", async (req, res) => {
   const products = await STRIPE_API.getProductsAndPlans();
   res.send(products)
