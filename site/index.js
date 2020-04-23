@@ -49,16 +49,21 @@ app.get('/image/:email_id', (req, res) => {
   }
 })
 app.get("/parse_search_page.json", function(req, res) {
-    //body_params = JSON.parse(request.body.read)
-    //search_url = URI.parse(URI.decode(body_params["search_url"])) rescue nil
-    //return {error: "Error! Can't parse url that looks like: #{body_params["search_url"]}. Please provide a Trade-A-Plane search results URL"}.to_json if search_url.nil? || !search_url.host.include?("trade-a-plane.com")
-    //return {error: "Please provide a Trade-A-Plane search URL"}.to_json if search_url.path != "/search"
-    //return {error: "Please provide a Trade-A-Plane search URL for aircraft only - this search doesn't look to be for aircraft."}.to_json if !search_url.query.include?("s-type=aircraft")
-    //return {search_params: URI.decode_www_form(search_url.query), search_url: search_url.to_s}.to_json
-    console.log(req.query.search_url)
-    api.parse_search_page(req.query.search_url, function(body){
-        res.send(body)
-    })
+    try {
+        var search_url = new URL(req.query.search_url)
+        if !(search_url.host == "trade-a-plane.com" || search_url.host == "www.trade-a-plane.com"){
+          res.json({error: "Error! This URL doesn't look like it's from Trade-A-Plane:"+req.query.search_url+". Please provide a Trade-A-Plane search results URL"})
+        } else if (search_url.pathname != "/search"){
+          res.json({error: "Please provide a Trade-A-Plane search URL"})
+        } else if (search_url.search.indexOf("s-type=aircraft") == -1){
+          res.json({error: "Please provide a Trade-A-Plane search URL for aircraft only - this search doesn't look to be for aircraft."})
+        } else {
+          res.json({search_params: Array.from(search_url.searchParams), search_url: search_url.to_s}.to_json)
+        }
+    }
+    catch(error) {
+      res.json({error: "Error! Can't parse url that looks like:"+req.query.search_url+". Please provide a Trade-A-Plane search results URL"})
+    }
 })
 app.post('/handlePayment', async (req, res) => {
   const customerInfo = {
