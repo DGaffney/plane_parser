@@ -126,10 +126,6 @@
                         Log in to the app to start creating your first survey!
                       </p>
                     </div>
-
-                    <a href="/" class="card-btn">
-                      Log In
-                    </a>
                   </div>
 
                   <!-- ERROR STATE -->
@@ -201,18 +197,6 @@
               window.history.replaceState("", "TAP Deals", "/?search_url="+url);
             }
           })
-          
-          stripe.redirectToCheckout({
-            // Make the id field from the Checkout Session creation API response
-            // available to this file, so you can provide it as parameter here
-            // instead of the {{CHECKOUT_SESSION_ID}} placeholder.
-            sessionId: '{{CHECKOUT_SESSION_ID}}'
-          }).then(function (result) {
-            // If `redirectToCheckout` fails due to a browser or network
-            // error, display the localized error message to your customer
-            // using `result.error.message`.
-          });
-          
         }
         function sendAlert(alertDialog){
           $("#error_container").html('<br /><div id="error_box" class="alert alert-warning alert-dismissible fade hide" role="alert">'+alertDialog+'<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>')
@@ -318,15 +302,12 @@
          * Hide all other "states"
          */
         function showState(id) {
-          document.getElementById('payment-form').classList.add('hide');
-          document.getElementById('loading').classList.add('hide');
-          document.getElementById('success').classList.add('hide');
-          document.getElementById('error').classList.add('hide');
-
-          document.getElementById(id).classList.remove('hide');
+          $("#payment-form").collapse("hide")
+          $("#loading").collapse("hide")
+          $("#success").collapse("hide")
+          $("#error").collapse("hide")
+          $("#"+id).collapse("show")
         }
-
-
         /* MORE STRIPE ELEMENTS ACTIONS */
 
         /* Create "card" instance of Stripe Elements and mount it to "#card-element" div */
