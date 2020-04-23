@@ -454,6 +454,7 @@
         window.onload = function() {
           urlParams = new URLSearchParams(window.location.search);
           if (urlParams.get("search_url")){
+            flipTryNow()
             $("#url").val(urlParams.get("search_url"))
             validateSearch()
           } else if (urlParams.get("try_now")) {
