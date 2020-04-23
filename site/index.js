@@ -22,8 +22,8 @@ app.engine('html', engines.mustache);
 app.set('view engine', 'html');
 app.use(bodyParser.json());
 var http = require('http').Server(app);
+var STRIPE_API = require('./stripe-functions.js');
 var api = require("./api.js")
-var stripe = require('stripe')(api.settings.stripe_secret);
 
 f = require('util').format,
 
@@ -54,21 +54,8 @@ app.get("/parse_search_page.json", function(req, res) {
     })
 })
 app.get("/start_signup.json", function(req, res){
-
-  stripe.checkout.sessions.create(
-    {
-      success_url: 'https://tapdeals.cognitivesurpl.us/success?session_id={CHECKOUT_SESSION_ID}',
-      cancel_url: 'https://tapdeals.cognitivesurpl.us/cancel',
-      payment_method_types: ['card'],
-      items: [{
-        plan: api.settings.email_subscription_product_id,
-      }],
-    },
-    function(err, session) {
-      console.log(session)
-      res.send(session)
-    }
-  );
+  const products = await STRIPE_API.getProductsAndPlans();
+  res.send(products)
 })
 app.post("/signup.json", function(req, res){
     email_config = req.body
