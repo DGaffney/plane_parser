@@ -60,7 +60,7 @@ app.get("/start_signup.json", function(req, res){
       success_url: 'https://tapdeals.cognitivesurpl.us/success?session_id={CHECKOUT_SESSION_ID}',
       cancel_url: 'https://tapdeals.cognitivesurpl.us/cancel',
       payment_method_types: ['card'],
-      line_items: [{
+      items: [{
         plan: api.settings.email_subscription_product_id,
       }],
     },
