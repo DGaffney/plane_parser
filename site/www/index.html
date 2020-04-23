@@ -87,7 +87,7 @@
 
                     <!-- We'll put the error messages in this element -->
                     <div id="card-errors" role="alert"></div>
-                    <button type="submit">Subscribe</button>
+                    <button id="submit_subscription" type="submit">Subscribe</button>
                   </form>
                 </body>
                 <form id="validate_search_form" >
@@ -215,7 +215,7 @@
         };
 
         // Disable the button until we have Stripe set up on the page
-        document.querySelector("button").disabled = true;
+        document.querySelector("#submit_subscription").disabled = true;
 
         fetch("/create-payment-intent", {
           method: "POST",
@@ -231,7 +231,7 @@
             return setupElements(data);
           })
           .then(function({ stripe, card, clientSecret }) {
-            document.querySelector("button").disabled = false;
+            document.querySelector("#submit_subscription").disabled = false;
 
             // Handle form submission.
             var form = document.getElementById("payment-form");
@@ -331,11 +331,11 @@
         // Show a spinner on payment submission
         var changeLoadingState = function(isLoading) {
           if (isLoading) {
-            document.querySelector("button").disabled = true;
+            document.querySelector("#submit_subscription").disabled = true;
             document.querySelector("#spinner").classList.remove("hidden");
             document.querySelector("#button-text").classList.add("hidden");
           } else {
-            document.querySelector("button").disabled = false;
+            document.querySelector("#submit_subscription").disabled = false;
             document.querySelector("#spinner").classList.add("hidden");
             document.querySelector("#button-text").classList.remove("hidden");
           }
