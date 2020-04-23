@@ -53,7 +53,7 @@ app.get("/parse_search_page.json", function(req, res) {
     })
 })
 app.post("/start_signup.json", function(req, res){
-  api.start_signup(function(req, res){
+  api.start_signup(function(body){
       res.send(body)
   })
 })
