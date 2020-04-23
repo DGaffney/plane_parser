@@ -66,6 +66,11 @@ module.exports = {
           callback(body)
       })
   },
+  start_signup: function (callback) {
+    get("start_signup.json", function(err, body){
+          callback(body)
+      })
+  },
   similar_businesses: function (params, callback) {
       post("api/similar_businesses.json", params, function(err, body){
           callback(body)

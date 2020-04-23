@@ -8,6 +8,20 @@ class Site < Sinatra::Base
     return {search_params: URI.decode_www_form(search_url.query), search_url: search_url.to_s}.to_json
   end
 
+  get "/start_signup.json" do
+    session = Stripe::Checkout::Session.create(
+      payment_method_types: ['card'],
+      subscription_data: {
+        items: [{
+          plan: SETTINGS["email_subscription_product_id"],
+        }],
+      },
+      success_url: 'https://tapdeals.cognitivesurpl.us/success?session_id={CHECKOUT_SESSION_ID}',
+      cancel_url: 'https://tapdeals.cognitivesurpl.us/cancel',
+    )
+    {session_id: session.id}
+  end
+
   get "/get_prediction.json" do
     if (cp = CachedPrediction.where(listing_id: params[:listing_id]).first)
       cp.hits += 1

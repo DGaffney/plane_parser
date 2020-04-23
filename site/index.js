@@ -52,6 +52,11 @@ app.get("/parse_search_page.json", function(req, res) {
         res.send(body)
     })
 })
+app.post("/start_signup.json", function(req, res){
+  api.start_signup(function(req, res){
+      res.send(body)
+  })
+})
 app.post("/signup.json", function(req, res){
     email_config = req.body
     email_config.updated_at = email_config.created_at = new Date()
