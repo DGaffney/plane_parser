@@ -71,7 +71,7 @@ app.get("/start_signup.json", function(req, res){
       ],
     },
     function(err, session) {
-      // asynchronously called
+      res.send(session)
     }
   );
 })
