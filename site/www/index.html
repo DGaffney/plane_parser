@@ -6,6 +6,7 @@
       <script async src="https://www.googletagmanager.com/gtag/js?id=UA-164240664-1"></script>
       <script>
         var stripe = Stripe('pk_test_jNs3EAozrEhu4yPSLdXrnQeZ');
+        var elements = stripe.elements();
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
@@ -25,6 +26,7 @@
   
 <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.5.0/css/bootstrap4-toggle.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.5.0/js/bootstrap4-toggle.min.js"></script>
+  <link rel="stylesheet" href="StripeElements.css">
   <link href="/css/one-page-wonder.min.css" rel="stylesheet">
   <meta name="description" content="TAP Deals | AI-powered aircraft market analysis">
   <meta property="og:title" content="TAP Deals | AI-powered aircraft market analysis" />
@@ -78,6 +80,17 @@
                   <tbody id="results_table" class="collapse">
                   </tbody>
                 </table>
+                <body>
+                  <form id="subscription-form">
+                    <div id="card-element" class="MyCardElement">
+                      <!-- Elements will create input elements here -->
+                    </div>
+
+                    <!-- We'll put the error messages in this element -->
+                    <div id="card-errors" role="alert"></div>
+                    <button type="submit">Subscribe</button>
+                  </form>
+                </body>
                 <form id="validate_search_form" >
                   <input type="hidden" id="search_url_input" name="search_url" value="">
                   <button id="validate_search_submit" type="submit" class="submit btn btn-primary">Looks Good!</button>
