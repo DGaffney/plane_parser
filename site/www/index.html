@@ -84,35 +84,10 @@
                     <div class="card">
                       <div class="card-body">
 
-                        <div class="card-title">
-                          <h4 class="header-uppercase header-blue">
-                            {{ plan.nickname }}
-                          </h4>
-                          <h2 class="price">{{ plan.amount }} 
-                            <span>
-                              / 
-                              {% if (plan.interval_count > 1) %} 
-                                {{ plan.interval_count }} {{ plan.interval }}s
-            
-                              {% else %}
-                                {{ plan.interval }}
-                              {% endif %}
-                            </span>
-                          </h2>
-                        </div>
-
                         <!-- INPUTS -->
-                        <input id="plan" type="hidden" value="{{ plan.formatted }}" name="plan"/>
-                        <input id="customerName"
-                          name="name"
-                          required="true"
-                          placeholder="Name" />
-                        <input id="customerEmail"
-                          name="email"
-                          type="email"
-                          required="true"
-                          placeholder="Email"/>
-    
+                        <input id="plan" type="hidden" value="plan_H95MyTZaOIY9fv" name="plan"/>
+                        <input id="customerName" name="customerName" type="text" class="form-control" placeholder="Name">
+                        <input id="customerEmail" name="customerEmail" type="text" class="form-control" placeholder="Email">
                         <div id="card-element">
                           <!-- Stripe Elements will be mounted here -->
                         </div>
@@ -123,9 +98,7 @@
                       </div>
 
                       <!-- FORM SUBMISSION -->
-                      <button
-                      class="card-btn"
-                      type="submit">Pay Now</button>
+                      <button id="start_subscription" type="submit" class="submit btn btn-primary">Start Subscription</button>
                     </div>
                   </form>
 
