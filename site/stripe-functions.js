@@ -3,7 +3,7 @@ require('dotenv').config();
 var stripe = require('stripe')(api.settings.stripe_secret);
 
 /* Import constants and helper functions */
-const UTILS = require('../utils/index');
+const UTILS = require('./stripe-utils.js');
 
 /**
  * @param {Array} products An array of Stripe products
