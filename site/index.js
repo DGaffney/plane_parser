@@ -77,6 +77,7 @@ app.post('/handle_payment.json', async (req, res) => {
     customerInfo,
   );
   customerInfo.searchUrl = req.body.search_url
+  customerInfo.subscription = subscription
   api.create_subscription(customerInfo, function(body){
     return res.json({ subscription });
   })
