@@ -25,7 +25,7 @@ class Mailer
   end
 
   def self.send_subscription_email(search_subscription, items)
-    html = Mailer.welcome_email_content(search_subscription)
+    html = Mailer.subscription_email_content(search_subscription)
     text = Nokogiri.parse(html).text.strip
     Mailer.send_via_postmark("hello@cognitivesurpl.us", search_subscription.user_email, "#{search_subscription.email_cadence.capitalize} Search Results from TAP Deals", text, html)
   end
