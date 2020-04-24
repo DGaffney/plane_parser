@@ -42,6 +42,8 @@ class SubscriptionChecker
   def self.check_subscriptions
     SearchSubscription.active.each do |ss|
       SubscriptionChecker.check_url(ss)
+    end
+    SearchSubscription.active.each do |ss|
       ss.send_subscription_email
     end
   end
