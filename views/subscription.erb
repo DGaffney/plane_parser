@@ -10,7 +10,7 @@
 					<% if item.item_type == "pending_tweet" %>
 						<li style="font-family: Arial"><b>Pending Tweet:</b> "<%= item.content["tweet"] %>" - <a style="color: #FFAF7B"href="http://www.trade-a-plane.com<%= item.content["link"] %>">Link to Listing</a></li>
 					<% elsif item.item_type == "search_result" %>
-						<li style="font-family: Arial"><b>Search Result:</b> <a style="color: #FFAF7B" href="http://www.trade-a-plane.com<%= item.content["link"] %>"><%= item.conent["text"] %></a></li>
+						<li style="font-family: Arial"><b>Search Result:</b> <a style="color: #FFAF7B" href="http://www.trade-a-plane.com<%= item.content["link"] %>"><%= item.content["text"] %></a></li>
 							<ul>
 								<li>Price: $<%= item.content["actual_price"].to_i.to_s.reverse.gsub(/(\d{3})(?=\d)/, '\\1,').reverse %></li>
 								<li>Predicted Price: $<%= item.content["predicted_price"].to_i.to_s.reverse.gsub(/(\d{3})(?=\d)/, '\\1,').reverse %></li>
