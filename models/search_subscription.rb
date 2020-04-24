@@ -55,7 +55,11 @@ class SearchSubscription
   end
 
   def deactivate
-    Stripe::Subscription.delete(self.subscription_id)
+    begin
+      Stripe::Subscription.delete(self.subscription_id)
+    rescue
+      print("Error on deactivation")
+    end
     self.deactivated_at = Time.now
     self.save!
   end
