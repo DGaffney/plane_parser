@@ -90,19 +90,19 @@ app.post('/handle_payment.json', async (req, res) => {
 //});
 
 app.get("/get_current_subscriptions.json", function(req, res){
-	api.get_current_subscriptions(req.body.id, function(body){
+	api.get_current_subscriptions(req.query.id, function(body){
 		res.send(body)
 	})
 });
 
 app.get("/set_subscription_cadence.json", function(req, res){
-	api.set_subscription_cadence(req.body.id, req.body.cadence, function(body){
+	api.set_subscription_cadence(req.query.id, req.query.cadence, function(body){
 		res.send(body)
 	})
 });
 
 app.get("/unsubscribe.json", function(req, res){
-	api.unsubscribe(req.body.id, function(body){
+	api.unsubscribe(req.query.id, function(body){
 		res.send(body)
 	})
 });
