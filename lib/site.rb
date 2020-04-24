@@ -77,7 +77,6 @@ class Site < Sinatra::Base
   end
 
   get "/unsubscribe.json" do
-    binding.pry
     ss = SearchSubscription.find(params[:id])
     ss.deactivate
     return {success: true}.to_json
