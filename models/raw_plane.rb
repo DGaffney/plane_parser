@@ -35,7 +35,7 @@ class RawPlane
   field :latest_certficate_reissue_date
   field :header_image
   def predicted_stock_in_days(days=90)
-    times = RawPlane.similar_planes.collect(&:created_at).sort
+    times = self.similar_planes.collect(&:created_at).sort
     per_day = times.count / ((times.last-times.first)/(60*60*24))
     {average_per_timeframe: per_day*days, probability_of_stock_in_timeframe: 1-Distribution::Poisson.pdf(0, per_day*days), timeframe: days}
   end
