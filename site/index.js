@@ -84,26 +84,47 @@ app.post('/handle_payment.json', async (req, res) => {
   
 });
 
-app.get("/products.json", async (req, res) => {
-  const products = await STRIPE_API.getProductsAndPlans();
-  res.send(products)
+//app.get("/products.json", async (req, res) => {
+//  const products = await STRIPE_API.getProductsAndPlans();
+//  res.send(products)
+//});
+
+app.get("/get_current_subscriptions.json", function(req, res){
+	api.get_current_subscriptions(req.body.id, function(body){
+		res.send(body)
+	})
 });
+
+app.get("/set_subscription_cadence.json", function(req, res){
+	api.set_subscription_cadence(req.body.id, req.body.cadence, function(body){
+		res.send(body)
+	})
+});
+
 app.get("/unsubscribe.json", function(req, res){
-    api.unsubscribe(req.email_config_id, function(body){
-        res.send(body)
-    })
-})
+	api.unsubscribe(req.body.id, function(body){
+		res.send(body)
+	})
+});
+  
+  
+  
 app.get("/about", function(req, res){
     res.render("./../www/about.html", {})
 })
+
+app.get("/manage", function(req, res){
+    res.render("./../www/manage.html", {})
+})
+
+app.get("/unsubscribe", function(req, res){
+    res.render("./../www/unsubscribe.html", {})
+})
+
 app.get("/privacy", function(req, res){
     res.render("./../www/privacy.html", {})
 })
-app.get("/unsubscribe/:email_config_id", function(req, res){
-    api.unsubscribe(req.params.email_config_id, function(body){
-        res.render("./../www/unsubscribed.html")
-    })
-})
+
 app.use('/', express.static('www'));
 app.use(function (req, res, next) {
   res.status(404).render("./../www/404.html", {})

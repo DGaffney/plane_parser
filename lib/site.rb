@@ -60,7 +60,12 @@ class Site < Sinatra::Base
       return {error: "Couldn't find a subscription with that ID."}.to_json
     end
   end
-  
+
+  get "/get_current_subscriptions.json" do
+    search_subscriptions = SearchSubscription.all_by_one_id(params[:id])
+    return {current_cadence: search_subscriptions.first.email_cadence, subscriptions: search_subscriptions.collect{|x| {id: x.id, search_url: x.search_url, last_sent_at: x.last_sent_at}}}
+  end
+
   get "/set_subscription_cadence.json" do
     return {error: "Cadence can only be daily or weekly!"}.to_json if !["daily", "weekly"].include?(params[:cadence])
     search_subscriptions = SearchSubscription.all_by_one_id(params[:id])

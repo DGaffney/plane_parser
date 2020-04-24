@@ -39,28 +39,20 @@ module.exports = {
           callback(body)
       })
   },
-  get_email_config: function (email_config_id, callback) {
-      get("api/get_email_config.json?email_config_id="+email_config_id, function(err, body){
-          callback(body)
-      })
+  get_current_subscriptions: function(id, callback) { 
+	  get("get_current_subscriptions.json?id="+id, function(err, body){
+		  callback(body)
+	  })
   },
-  alter_email_config: function (query, callback) {
-      email_settings = {
-          "primary_events": query.primary_events,
-          "attribute_updates": query.attribute_updates,
-          "reviews": query.reviews,
-          "search_ranks": query.search_ranks,
-          "no_emails": query.no_emails,
-          "email_config_id": query.email_config_id,
-      }
-      post("api/alter_email_config.json", email_settings, function(err, body){
-          callback(body)
-      })
+  set_subscription_cadence: function(id, cadence, callback) { 
+	  get("set_subscription_cadence.json?id="+id+"&cadence="+cadence, function(err, body){
+		  callback(body)
+	  })
   },
-  store_email_config: function (email_config, callback) {
-      post("store_email_config.json", email_config, function(err, body){
-          callback(body)
-      })
+  unsubscribe: function(id, callback) { 
+	  get("unsubscribe.json?id="+id, function(err, body){
+		  callback(body)
+	  })
   },
   parse_search_page: function (search_url, callback) {
     post("parse_search_page.json", {"search_url": search_url}, function(err, body){

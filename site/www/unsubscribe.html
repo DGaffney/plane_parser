@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+  <head>
+      <!-- Global site tag (gtag.js) - Google Analytics -->
+      <script async src="https://www.googletagmanager.com/gtag/js?id=UA-164240664-1"></script>
+      <script>
+        var stripe = Stripe('pk_test_jNs3EAozrEhu4yPSLdXrnQeZ');
+        var elements = stripe.elements();
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-164240664-1');
+      </script>
+    <title>TAP Deals | AI-powered aircraft market analysis</title>
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
+<script src="/files/typeahead.js">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  <link href="https://fonts.googleapis.com/css?family=Catamaran:100,200,300,400,500,600,700,800,900" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Lato:100,100i,300,300i,400,400i,700,700i,900,900i" rel="stylesheet">
+  <script src="https://kit.fontawesome.com/035ea2adea.js"></script>
+  
+<link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.5.0/css/bootstrap4-toggle.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.5.0/js/bootstrap4-toggle.min.js"></script>
+  <link href="/css/one-page-wonder.min.css" rel="stylesheet">
+  <meta name="description" content="TAP Deals | AI-powered aircraft market analysis">
+  <meta property="og:title" content="TAP Deals | AI-powered aircraft market analysis" />
+  <meta property="og:url" content="http://tapdeals.cognitivesurpl.us/" />
+  <meta property="og:description" content="TAP Deals | AI-powered aircraft market analysis">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head>
+  <body>
+  <header class="masthead text-center text-white">
+    <div class="masthead-content">
+      <div class="container">
+        <h1 class="masthead-heading mb-0">TAP Deals</h1>
+        <h3 class="mb-0">AI-powered aircraft market analysis</h3>
+      </div>
+    </div>
+  </header>
+    <section role="main" class="flex-shrink-0">
+    <div class="container">
+        <br />
+        <h1 class="primary text-center">Unsubscribe</h1>
+        <p>Sorry to see you go - below are your current subscriptions. Please click "unsubscribe" next to each one that you'd like to unsubscribe from - note that to re-subscribe, you will have to purchase them again.</p>
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">Search URL</th>
+              <th scope="col">Last Search Result Sent At</th>
+              <th scope="col">Unsubscribe Link</th>
+            </tr>
+          </thead>
+          <tbody id="results_table">
+          </tbody>
+        </table>
+    </div>
+    </section>
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <footer class="footer py-5 bg-black">
+      <div class="container">
+        <span class="text-muted">Questions? <a class="secondary" href="mailto:hello@cognitivesurpl.us">Contact us</a>. | <a class="secondary" href="/about">About</a> | <a class="secondary" href="/privacy">Privacy Policy</a> | <a class="secondary" href="/">Home</a></span>
+      </div>
+    </footer>
+	<script type="text/javascript">
+        function unsubscribe(id){
+          fetch('/unsubscribe.json?id='+id)
+          .then(function(response) {
+            return response.json();
+          }).then(function(results) {
+            if (results.error){
+                sendAlert(results.error)
+            } else {
+			  $("#"+id).collapse("hide")
+            }
+          })
+        }
+        function sendAlert(alertDialog){
+          $("#error_container").html('<br /><div id="error_box" class="alert alert-warning alert-dismissible fade hide" role="alert">'+alertDialog+'<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>')
+          $("#error_box").collapse("show")
+        }
+		function renderSubscriptions(subscriptions){
+            search_results_table = ""
+            for (i = 0; i < subscriptions.subscriptions.length; i++) {
+			  sub = subscriptions.subscriptions[i]
+              search_results_table = search_results_table +  "<tr id='"+sub.id+"' class='collapse show'><td><em><a href='"+sub.search_url+"' target='_blank'>"+sub.search_url+"</a></em></td><td>"+sub.last_sent_at+"</td><td><a onclick='unsubscribe(\""+sub.id+"\")'>Unsubscribe</a></td></tr>"
+            }
+            $("#results_table").html(search_results_table)
+		}
+		function loadSubscriptions(id){
+            fetch('/get_current_subscriptions.json?id='+id)
+            .then(function(response) {
+              return response.json();
+            }).then(function(results) {
+              if (results.error){
+                  sendAlert(results.error)
+              } else {
+                $("#email_results").collapse("show")
+                renderSubscriptions(results)
+              }
+            })
+		}
+        window.onload = function() {
+          urlParams = new URLSearchParams(window.location.search);
+		  loadSubscriptions(urlParams.get("id"))
+        };
+	</script>
+  </body>
+</html>
