@@ -44,7 +44,7 @@
     <section role="main" class="flex-shrink-0">
     <div class="container">
         <br />
-        <h1 class="primary text-center">Unsubscribe</h1>
+        <h1 class="primary text-center">Manage Subscriptions</h1>
         <p>Sorry to see you go - below are your current subscriptions. Please click "unsubscribe" next to each one that you'd like to unsubscribe from - note that to re-subscribe, you will have to purchase them again.</p>
         <table class="table">
           <thead>
@@ -109,7 +109,7 @@
 		}
         window.onload = function() {
           urlParams = new URLSearchParams(window.location.search);
-		  loadSubscriptions(urlParams.get("id"))
+		  loadSubscriptions(urlParams.get("subscription_id"))
         };
 	</script>
   </body>
