@@ -36,32 +36,32 @@ module.exports = {
   settings: config,
   ping: function (callback) {
       get("ping.json", function(err, body){
-          callback(body)
+          return callback(body)
       })
   },
   get_current_subscriptions: function(id, callback) { 
 	  get("get_current_subscriptions.json?id="+id, function(err, body){
-		  callback(body)
+		  return callback(body)
 	  })
   },
   set_subscription_cadence: function(id, cadence, callback) { 
 	  get("set_subscription_cadence.json?id="+id+"&cadence="+cadence, function(err, body){
-		  callback(body)
+		  return callback(body)
 	  })
   },
   unsubscribe: function(id, callback) { 
 	  get("unsubscribe.json?id="+id, function(err, body){
-		  callback(body)
+		  return callback(body)
 	  })
   },
   parse_search_page: function (search_url, callback) {
     post("parse_search_page.json", {"search_url": search_url}, function(err, body){
-          callback(body)
+          return callback(body)
       })
   },
   create_subscription: function (customerInfo, callback) {
     post("create_subscription.json", customerInfo, function(err, body){
-        callback(body)
+        return callback(body)
     })
   },
 };
