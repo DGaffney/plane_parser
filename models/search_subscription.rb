@@ -10,7 +10,8 @@ class SearchSubscription
   field :subscription_item_id
   field :subscription_title
   after_create :send_welcome_email
+
   def send_welcome_email
-    
+    Mailer.send_welcome_email(self)
   end
 end
