@@ -5,7 +5,7 @@ class Site < Sinatra::Base
       user_name: post_params[:name],
       user_email: post_params[:email],
       plan_id: post_params[:planId],
-      search_url: post_params[:search_url],
+      search_url: post_params[:searchUrl],
       customer_id: post_params[:subscription]["customer"],
       subscription_id: post_params[:subscription]["id"],
       subscription_item_id: post_params[:subscription]["items"]["data"][0]["id"],
