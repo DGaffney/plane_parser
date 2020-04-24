@@ -1,9 +1,18 @@
 class Site < Sinatra::Base
   post "/create_subscription.json" do
-binding.pry
-    post_params = JSON.parse(request.body.read)
-    subscription = Subscription.new(user_name: post_params[:name], user_email: post_params[:email], plan_id: post_params[:planId], search_url: post_params[:search_url])
+    post_params = JSON.parse(request.body.read).symbolize_keys
+    subscription = SearchSubscription.new(
+      user_name: post_params[:name],
+      user_email: post_params[:email],
+      plan_id: post_params[:planId],
+      search_url: post_params[:search_url],
+      customer_id: post_params[:subscription]["customer"],
+      subscription_id: post_params[:subscription]["id"],
+      subscription_item_id: post_params[:subscription]["items"]["data"][0]["id"],
+      subscription_title: post_params[:subscription]["plan"]["nickname"]
+    )
     subscription.save!
+    return subscription.to_json
   end
 
   post "/parse_search_page.json" do
