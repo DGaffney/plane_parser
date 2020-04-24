@@ -1,3 +1,4 @@
+require 'postmark'
 require 'stripe'
 require 'pry'
 require 'twitter'
