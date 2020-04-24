@@ -19,8 +19,8 @@ class SubscriptionChecker
     listing_ids = self.listing_ids(search_subscription.search_url)
     RawPlane.where(:listing_id.in => listing_ids).each do |raw_plane|
       if SearchSubscriptionItem.where(item_type: "search_result", "content.raw_plane_id": raw_plane.id, search_subscription_id: search_subscription.id).first.nil?
-        begin
-          pred_price = raw_plane.predicted_price
+        pred_price = raw_plane.predicted_price
+        if pred_price
           item_content = {
             predicted_stock: raw_plane.predicted_stock_in_days,
             actual_percentile: raw_plane.similar_planes.collect(&:price).reverse_percentile(raw_plane.price),
@@ -36,8 +36,6 @@ class SubscriptionChecker
             content: item_content,
             item_type: "search_result",
           ).save!
-        rescue
-          binding.pry
         end
       end
     end
