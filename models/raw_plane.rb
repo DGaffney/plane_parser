@@ -34,6 +34,12 @@ class RawPlane
   field :delisted
   field :latest_certficate_reissue_date
   field :header_image
+  def predicted_stock_in_days(days=90)
+    times = RawPlane.similar_planes.collect(&:created_at).sort
+    per_day = times.count / ((times.last-times.first)/(60*60*24))
+    {average_per_timeframe: per_day*days, probability_of_stock_in_timeframe: 1-Distribution::Poisson.pdf(0, per_day*days), timeframe: days}
+  end
+
   def self.get_predictions(filename="plane_preds2.csv")
     csv = CSV.open(filename, "w")
     RawPlane.where(:price.ne => 0).all.to_a.shuffle.collect{|rp| csv << [rp.make, rp.model, rp.category_level, rp.price, rp.predicted_price]}

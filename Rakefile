@@ -17,3 +17,6 @@ end
 task :tweeter do
   Tweeter.run
 end
+task :check_subscriptions do
+  SubscriptionChecker.check_subscriptions
+end

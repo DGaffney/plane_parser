@@ -1,0 +1,38 @@
+<!doctype html>
+<html>
+    <head>
+    </head>
+    <body style="margin:0">
+        <div style="max-width:1000px;margin:0 auto">
+            <p style="margin:20px;font-family: Arial">Hello! We have <%= @items.count %> update<%= @items.count == 1 ? "" : "s" %> for you from TAP Deals:</p>
+            <ul style="margin-left:40px;line-height:1.5em">
+				<% @items.each do |item| %>
+					<% if item.item_type == "pending_tweet" %>
+						<li style="font-family: Arial"><b>Pending Tweet:</b> "<%= item.content["tweet"] %>" - <a style="color: #FFAF7B"href="http://www.trade-a-plane.com<%= item.content["link"] %>">Link to Listing</a></li>
+					<% elsif item.item_type == "search_result" %>
+						<li style="font-family: Arial"><b>Search Result:</b> <a style="color: #FFAF7B" href="http://www.trade-a-plane.com<%= item.content["link"] %>"><%= item.conent["text"] %></a></li>
+							<ul>
+								<li>Price: $<%= item.content["actual_price"].to_i.to_s.reverse.gsub(/(\d{3})(?=\d)/, '\\1,').reverse %></li>
+								<li>Predicted Price: $<%= item.content["predicted_price"].to_i.to_s.reverse.gsub(/(\d{3})(?=\d)/, '\\1,').reverse %></li>
+								<li>Likelihood of similar plane in next 90 days: <%= item.content["predicted_stock"]["probability_of_stock_in_timeframe"].round(4)*100 %>%</li>
+								<li>Likelihood of similar plane of similar or cheaper price in next 90 days: <%= (item.content["predicted_stock"]["probability_of_stock_in_timeframe"]*item.content["actual_percentile"]).round(4)*100 %>%</li>
+							</ul>
+					<% end %>
+				<% end %>
+            </ul>
+            <table border="0" cellpadding="0" cellspacing="0" style="width:100%;max-width:1000px;background:#000;height:80px;border-top:0;">
+                <tr>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>
+                        <p style="margin-left:20px;color:#fff;font-size:10px;font-family: Arial">Thanks for using TAP Deals! Have a great day. Also! If you want to stop getting these, feel free to <a style="color: #FFAF7B"  href="http://tapdeals.cognitivesurpl.us/unsubscribe?subscription_id=<%= @subscription_id %>">unsubscribe</a>, or <a style="color: #FFAF7B"  href="http://tapdeals.cognitivesurpl.us/manage?subscription_id=<%= @subscription_id %>">manage alerts</a> to quiet them down a bit.</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                </tr>
+            </table>
+        <div>
+    </body>
+</html>

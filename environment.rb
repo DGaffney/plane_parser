@@ -1,3 +1,4 @@
+require 'distribution'
 require 'postmark'
 require 'stripe'
 require 'pry'

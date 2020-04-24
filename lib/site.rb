@@ -24,20 +24,6 @@ class Site < Sinatra::Base
     return {search_params: URI.decode_www_form(search_url.query), search_url: search_url.to_s}.to_json
   end
 
-  get "/start_signup.json" do
-    session = Stripe::Checkout::Session.create(
-      payment_method_types: ['card'],
-      subscription_data: {
-        items: [{
-          plan: SETTINGS["email_subscription_product_id"],
-        }],
-      },
-      success_url: 'https://tapdeals.cognitivesurpl.us/success?session_id={CHECKOUT_SESSION_ID}',
-      cancel_url: 'https://tapdeals.cognitivesurpl.us/cancel',
-    )
-    {session_id: session.id}
-  end
-
   get "/get_prediction.json" do
     if (cp = CachedPrediction.where(listing_id: params[:listing_id]).first)
       cp.hits += 1
@@ -64,5 +50,30 @@ class Site < Sinatra::Base
     parse_error = since_time.nil?
     since_time ||= Time.now-60*60*24*7
     return {since_time: since_time, used_since_time_default: parse_error, listing_ids: RawPlane.where(:created_at.gte => since_time).distinct(:listing_id)}.to_json
+  end
+  
+  get "/search_subscriptions_by_id.json" do
+    search_subscriptions = SearchSubscription.all_by_one_id(params[:id])
+    if search_subscriptions
+      return search_subscriptions.to_json
+    else
+      return {error: "Couldn't find a subscription with that ID."}.to_json
+    end
+  end
+  
+  def "/set_subscription_cadence.json" do
+    return {error: "Cadence can only be daily or weekly!"}.to_json if !["daily", "weekly"].include?(params[:cadence])
+    search_subscriptions = SearchSubscription.all_by_one_id(params[:id])
+    search_subscriptions.each do |ss|
+      ss.email_cadence = params[:cadence]
+      ss.save!
+    end
+    return {success: true}.to_json
+  end
+
+  def "/unsubscribe.json" do
+    ss = SearchSubscription.find(params[:id])
+    ss.deactivate
+    return {success: true}.to_json
   end
 end
