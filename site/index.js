@@ -117,10 +117,6 @@ app.get("/manage", function(req, res){
     res.render("./../www/manage.html", {})
 })
 
-app.get("/unsubscribe", function(req, res){
-    res.render("./../www/unsubscribe.html", {})
-})
-
 app.get("/privacy", function(req, res){
     res.render("./../www/privacy.html", {})
 })

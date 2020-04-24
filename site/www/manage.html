@@ -44,7 +44,19 @@
     <section role="main" class="flex-shrink-0">
     <div class="container">
         <br />
-        <h1 class="primary text-center">Manage Subscription</h1>
+        <h1 class="primary text-center">Manage Subscriptions</h1>
+        <p>Sorry to see you go - below are your current subscriptions. Please click "unsubscribe" next to each one that you'd like to unsubscribe from - note that to re-subscribe, you will have to purchase them again.</p>
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">Search URL</th>
+              <th scope="col">Last Search Result Sent At</th>
+              <th scope="col">Unsubscribe Link</th>
+            </tr>
+          </thead>
+          <tbody id="results_table">
+          </tbody>
+        </table>
     </div>
     </section>
     <br />
@@ -57,5 +69,48 @@
         <span class="text-muted">Questions? <a class="secondary" href="mailto:hello@cognitivesurpl.us">Contact us</a>. | <a class="secondary" href="/about">About</a> | <a class="secondary" href="/privacy">Privacy Policy</a> | <a class="secondary" href="/">Home</a></span>
       </div>
     </footer>
+	<script type="text/javascript">
+        function unsubscribe(id){
+          fetch('/unsubscribe.json?id='+id)
+          .then(function(response) {
+            return response.json();
+          }).then(function(results) {
+            if (results.error){
+                sendAlert(results.error)
+            } else {
+			  $("#"+id).collapse("hide")
+            }
+          })
+        }
+        function sendAlert(alertDialog){
+          $("#error_container").html('<br /><div id="error_box" class="alert alert-warning alert-dismissible fade hide" role="alert">'+alertDialog+'<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>')
+          $("#error_box").collapse("show")
+        }
+		function renderSubscriptions(subscriptions){
+            search_results_table = ""
+            for (i = 0; i < subscriptions.subscriptions.length; i++) {
+			  sub = subscriptions.subscriptions[i]
+              search_results_table = search_results_table +  "<tr id='"+sub.id+"' class='collapse show'><td><em><a href='"+sub.search_url+"' target='_blank'>"+sub.search_url+"</a></em></td><td>"+sub.last_sent_at+"</td><td><a style='cursor:pointer;' class='secondary' onclick='unsubscribe(\""+sub.id.$oid+"\")'>Unsubscribe</a></td></tr>"
+            }
+            $("#results_table").html(search_results_table)
+		}
+		function loadSubscriptions(id){
+            fetch('/get_current_subscriptions.json?id='+id)
+            .then(function(response) {
+              return response.json();
+            }).then(function(results) {
+              if (results.error){
+                  sendAlert(results.error)
+              } else {
+                $("#email_results").collapse("show")
+                renderSubscriptions(results)
+              }
+            })
+		}
+        window.onload = function() {
+          urlParams = new URLSearchParams(window.location.search);
+		  loadSubscriptions(urlParams.get("subscription_id"))
+        };
+	</script>
   </body>
 </html>
