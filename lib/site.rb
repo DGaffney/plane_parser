@@ -61,7 +61,7 @@ class Site < Sinatra::Base
     end
   end
   
-  def "/set_subscription_cadence.json" do
+  get "/set_subscription_cadence.json" do
     return {error: "Cadence can only be daily or weekly!"}.to_json if !["daily", "weekly"].include?(params[:cadence])
     search_subscriptions = SearchSubscription.all_by_one_id(params[:id])
     search_subscriptions.each do |ss|
@@ -71,7 +71,7 @@ class Site < Sinatra::Base
     return {success: true}.to_json
   end
 
-  def "/unsubscribe.json" do
+  get "/unsubscribe.json" do
     ss = SearchSubscription.find(params[:id])
     ss.deactivate
     return {success: true}.to_json
