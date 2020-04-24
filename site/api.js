@@ -67,44 +67,9 @@ module.exports = {
           callback(body)
       })
   },
-  similar_businesses: function (params, callback) {
-      post("api/similar_businesses.json", params, function(err, body){
-          callback(body)
-      })
+  create_subscription: function (customerInfo, callback) {
+    post("create_subscription.json", customerInfo, function(err, body){
+        callback(body)
+    })
   },
-  notifications: function (business_id, callback) {
-      get("api/notifications.json?business_id="+business_id, function(err, body){
-          callback(body)
-      })
-  },
-  unsubscribe: function (email_config_id, callback) {
-      get("api/unsubscribe.json?email_config_id="+email_config_id, function(err, body){
-          callback(body)
-      })
-  },
-  start_tracking: function (email_config_id, callback) {
-      get("api/start_tracking.json?email_config_id="+email_config_id, function(err, body){
-          callback(body)
-      })
-  },
-  link: function (params, callback) {
-      get("api/link.json?"+qs.stringify(params), function(err, body){
-          callback(body)
-      })
-  },
-  track_open: function (email_id, config, callback) {
-      get("api/track_open.json?email_id="+email_id+"&config="+config, function(err, body){
-          callback(body)
-      })
-  },
-  email_detail: function(email_id, format, callback) {
-      get("api/email_detail.json?email_id="+email_id+"&format="+format, function(err, body){
-          callback(body)
-      })
-  },
-  full_notifications: function(email_config_id, format, callback) {
-      get("api/full_detail.json?email_config_id="+email_config_id+"&format="+format, function(err, body){
-          callback(body)
-      })
-  }
 };

@@ -112,10 +112,10 @@
                 </div>
                 <div class="col-6">
                   <!--START-->
+				  <h2>Purchase Search Subscription</h2>
                   <form id="payment-form" class="collapse show">
                       <div class="card">
                         <div class="card-body">
-
                           <!-- INPUTS plan_H95MyTZaOIY9fv -->
                         
                           <input id="plan" type="hidden" value="plan_H9C2xO18zlLFak" name="plan"/>
@@ -132,9 +132,12 @@
                           </div>
                         </div>
 
-                        <!-- FORM SUBMISSION -->
-                        <button id="start_subscription" type="submit" class="submit btn btn-primary">Start Subscription</button>
                       </div>
+					  <br />
+					  <p><b>Total:</b> $1 / month, free trial for first 30 days</p>
+					  <br />
+					  <!-- FORM SUBMISSION -->
+                      <button id="start_subscription" type="submit" class="submit btn btn-primary">Start Subscription</button>
                     </form>
 
                     <!-- LOADING STATE -->
@@ -385,14 +388,16 @@
 
         function stripePaymentMethodHandler(paymentMethod) {
           showState('loading'); // Show loader
+          const search_url = document.getElementById('url').value;
 
-          fetch('/handlePayment', {
+          fetch('/handle_payment.json', {
             method: 'post',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
               email: document.getElementById('customerEmail').value,
               name: document.getElementById('customerName').value,
               plan: document.getElementById('plan').value,
+              search_url: search_url,
               paymentMethodId: paymentMethod.id,
             }),
           }).then((response) => {

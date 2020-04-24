@@ -65,7 +65,7 @@ app.get("/parse_search_page.json", function(req, res) {
       return res.json({error: "Error! Can't parse url that looks like:"+req.query.search_url+". Please provide a Trade-A-Plane search results URL"})
     }
 })
-app.post('/handlePayment', async (req, res) => {
+app.post('/handle_payment.json', async (req, res) => {
   const customerInfo = {
     name: req.body.name,
     email: req.body.email,
@@ -76,20 +76,17 @@ app.post('/handlePayment', async (req, res) => {
     req.body.paymentMethodId,
     customerInfo,
   );
-
-  return res.json({ subscription });
+  customerInfo.searchUrl = req.body.search_url
+  api.create_subscription(customerInfo, function(body){
+    return res.json({ subscription });
+  })
+  
 });
 
-app.get("/start_signup.json", async (req, res) => {
+app.get("/products.json", async (req, res) => {
   const products = await STRIPE_API.getProductsAndPlans();
   res.send(products)
 });
-app.post("/signup.json", function(req, res){
-    email_config = req.body
-    email_config.updated_at = email_config.created_at = new Date()
-    api.store_email_config(email_config, function(req, res){
-    })
-})
 app.get("/unsubscribe.json", function(req, res){
     api.unsubscribe(req.email_config_id, function(body){
         res.send(body)

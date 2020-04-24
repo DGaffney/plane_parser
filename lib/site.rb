@@ -1,4 +1,7 @@
 class Site < Sinatra::Base
+  post "/create_subscription.json" do
+    binding.pry
+  end
   post "/parse_search_page.json" do
     body_params = JSON.parse(request.body.read)
     search_url = URI.parse(URI.decode(body_params["search_url"])) rescue nil
