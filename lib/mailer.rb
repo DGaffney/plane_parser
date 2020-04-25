@@ -34,7 +34,7 @@ class Mailer
     @search_url = search_subscription.search_url
     @user_name = search_subscription.user_name
     @subscription_id = search_subscription.id
-    @items = items
+    @items = Hash[items.collect{|i| [i.raw_plane_id, i]}].values
     ERB.new(File.read("./views/subscription.erb")).result(binding)
   end
 end
