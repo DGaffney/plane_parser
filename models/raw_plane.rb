@@ -238,7 +238,7 @@ class RawPlane
   end
   
   def self.generate_make_model_variations
-    make_models = RawPlane.only(:make, :model).collect{|k| [k.make, k.model]}
+    make_models = RawPlane.only(:make, :model).collect{|k| [k.make, k.model]};false
     csv = CSV.open("model_name_variations.csv", "w")
     i = 0
     make_models.each do |make, model|
@@ -248,8 +248,10 @@ class RawPlane
       models = [AvionicDisambiguator.avionic_substring_generator(model), AvionicDisambiguator.avionic_substring_generator(model.downcase), AvionicDisambiguator.avionic_substring_generator(model.split(" ").collect(&:capitalize).join(" "))].flatten
       makes.each do |m|
         models.each do |mm|
-        csv << [m+" "+mm]
-        csv << [mm+" "+m]
+          f = m+" "+mm
+          csv << [f] if f.gsub(" ", "").length > 4
+          f = mm+" "+m
+          csv << [f] if f.gsub(" ", "").length > 4
         end
       end
     end;false
