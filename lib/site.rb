@@ -73,7 +73,7 @@ class Site < Sinatra::Base
       ss.email_cadence = params[:cadence]
       ss.save!
     end
-    return {current_cadence: params[:cadence]}.to_json
+    return {current_cadence: params[:cadence], id: {"$oid" => params[:id]}}.to_json
   end
 
   get "/unsubscribe.json" do
