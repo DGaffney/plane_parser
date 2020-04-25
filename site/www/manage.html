@@ -121,7 +121,7 @@
               if (results.error){
                   sendAlert(results.error)
               } else {
-				renderCadence(results.current_cadence, results.id.$oid)
+				renderCadence(results.current_cadence, id)
                 $("#email_results").collapse("show")
                 renderSubscriptions(results)
               }
