@@ -17,7 +17,8 @@ class SubscriptionChecker
 
   def self.check_url(search_subscription)
     listing_ids = self.listing_ids(search_subscription.search_url)
-    RawPlane.where(:listing_id.in => listing_ids).each do |raw_plane|
+    recently_sent_raw_plane_ids = SearchSubscriptionItem.where(:search_subscription_id.in => SearchSubscription.all_by_one_id(search_subscription.id).collect(&:id), :created_at.gte => Time.now-60*60*24*10).collect(&:raw_plane_id)
+    RawPlane.where(:id.nin => recently_sent_raw_plane_ids, :listing_id.in => listing_ids, :created_at.gte => Time.now-60*60*24*10).each do |raw_plane|
       if SearchSubscriptionItem.where(item_type: "search_result", "content.raw_plane_id": raw_plane.id, search_subscription_id: search_subscription.id).first.nil?
         pred_price = raw_plane.predicted_price
         if pred_price
