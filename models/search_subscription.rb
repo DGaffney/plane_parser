@@ -66,6 +66,7 @@ class SearchSubscription
   
   def add_tweet_item(tweet)
     SearchSubscriptionItem.new(
+      raw_plane_id: tweet.raw_plane_id,
       search_subscription_id: self.id,
       content: {tweet: tweet.text, link: RawPlane.find(tweet.raw_plane_id).link},
       item_type: "pending_tweet",
