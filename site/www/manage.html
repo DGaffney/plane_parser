@@ -93,14 +93,14 @@
             }
             $("#results_table").html(search_results_table)
 		}
-		renderCadence(current_cadence){
+		function renderCadence(current_cadence){
 			if (current_cadence == "weekly"){
 				$("#current_cadence").html("<p>Current email cadence: Weekly. <a onclick='changeCadence(\"daily\")' style='cursor:pointer;' class='secondary'>Change to daily</a>?</p>")
 			} else {
 				$("#current_cadence").html("<p>Current email cadence: Daily. <a onclick='changeCadence(\"weekly\")' style='cursor:pointer;' class='secondary'>Change to weekly</a>?</p>")
 			}
 		}
-		changeCadence(cadence){
+		function changeCadence(cadence){
 			
             fetch('/set_subscription_cadence.json?cadence='+cadence)
             .then(function(response) {
