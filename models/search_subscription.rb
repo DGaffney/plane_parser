@@ -18,7 +18,7 @@ class SearchSubscription
   end
 
   def self.active_daily
-    self.active.where(cadence: "daily")
+    self.active.where(email_cadence: "daily")
   end
 
   def send_subscription_email
@@ -68,7 +68,7 @@ class SearchSubscription
     SearchSubscriptionItem.new(
       raw_plane_id: tweet.raw_plane_id,
       search_subscription_id: self.id,
-      content: {tweet: tweet.text, link: RawPlane.find(tweet.raw_plane_id).link},
+      content: {tweet: tweet.tweet_text, link: RawPlane.find(tweet.raw_plane_id).link},
       item_type: "pending_tweet",
     ).save!
   end

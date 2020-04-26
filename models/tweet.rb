@@ -30,7 +30,7 @@ class Tweet
     t.tweet_text = text
     t.send_tweet_at = Time.now+60*60*24
     t.save!
-    SearchSubscription.active_daily.collect{|ss| ss.add_tweet_item(self)}
+    SearchSubscription.active_daily.collect{|ss| ss.add_tweet_item(t)}
     SendTweet.perform_at(t.send_tweet_at, t.id)
     sleep(3)
   end
