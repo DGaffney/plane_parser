@@ -8,7 +8,7 @@
             <ul style="margin-left:40px;line-height:1.5em">
 				<% @items.each do |item| %>
 					<% if item.item_type == "pending_tweet" %>
-						<li style="font-family: Arial"><b>Pending Tweet:</b> "<%= item.content["tweet"] %>" - <a style="color: #FFAF7B"href="http://www.trade-a-plane.com<%= item.content["link"] %>">Link to Listing</a></li>
+						<li style="font-family: Arial"><b>Pending Tweet:</b> "<%= item.content["tweet"].split(" ").reject{|x| x.include?("http://") || x.include?("https://")}.join(" ")[0..-3] %>" - <a style="color: #FFAF7B" href="http://www.trade-a-plane.com<%= item.content["link"] %>">Link to Listing</a></li>
 					<% elsif item.item_type == "search_result" %>
 						<li style="font-family: Arial"><b>Search Result:</b> <a style="color: #FFAF7B" href="http://www.trade-a-plane.com<%= item.content["link"] %>"><%= item.content["text"] %></a></li>
 							<ul>
