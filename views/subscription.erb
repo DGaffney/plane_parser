@@ -12,10 +12,10 @@
 					<% elsif item.item_type == "search_result" %>
 						<li style="font-family: Arial"><b>Search Result:</b> <a style="color: #FFAF7B" href="http://www.trade-a-plane.com<%= item.content["link"] %>"><%= item.content["text"] %></a></li>
 							<ul>
-								<li style="font-family: Arial">Price: $<%= item.content["price"].to_i.to_s.reverse.gsub(/(\d{3})(?=\d)/, '\\1,').reverse %></li>
+								<li style="font-family: Arial">Price: <% if item.content["price"].to_i == 0 %>Not Listed<% else %><%= item.content["price"].to_i.to_s.reverse.gsub(/(\d{3})(?=\d)/, '\\1,').reverse %><% end %></li>
 								<li style="font-family: Arial">Predicted Price: $<%= item.content["predicted_price"].to_i.to_s.reverse.gsub(/(\d{3})(?=\d)/, '\\1,').reverse %></li>
 								<li style="font-family: Arial">Likelihood of similar plane in next 90 days: <%= item.content["predicted_stock"]["probability_of_stock_in_timeframe"].to_f.to_odds %></li>
-								<li style="font-family: Arial">Likelihood of similar plane of similar or cheaper price in next 90 days: <%= item.content["predicted_stock"]["probability_of_stock_in_timeframe"]*item.content["actual_percentile"].to_f.to_odds %></li>
+								<li style="font-family: Arial">Likelihood of similar plane of similar or cheaper price in next 90 days: <%= (item.content["predicted_stock"]["probability_of_stock_in_timeframe"]*item.content["actual_percentile"].to_f).to_odds %></li>
 							</ul>
 					<% end %>
 				<% end %>
