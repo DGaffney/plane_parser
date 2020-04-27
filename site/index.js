@@ -49,22 +49,28 @@ app.get("/parse_search_page.json", function(req, res) {
     }
 })
 app.post('/handle_payment.json', async (req, res) => {
-  const customerInfo = {
-    name: req.body.name,
-    email: req.body.email,
-    planId: req.body.plan,
-  };
+	try {
+	    const customerInfo = {
+	      name: req.body.name,
+	      email: req.body.email,
+	      planId: req.body.plan,
+	    };
 
-  const subscription = await STRIPE_API.createCustomerAndSubscription(
-    req.body.paymentMethodId,
-    customerInfo,
-  );
-  customerInfo.searchUrl = req.body.search_url
-  customerInfo.subscription = subscription
-  api.create_subscription(customerInfo, function(body){
-    return res.json({ subscription });
-  })
-  
+	    const subscription = await STRIPE_API.createCustomerAndSubscription(
+	      req.body.paymentMethodId,
+	      customerInfo,
+	    );
+	    customerInfo.searchUrl = req.body.search_url
+	    customerInfo.subscription = subscription
+	    api.create_subscription(customerInfo, function(body){
+	      return res.json({ subscription });
+	    })
+	} catch(error) {
+		console.log(error)
+		return res.status(500).send({
+		   message: 'This is an error!'
+		});
+	}
 });
 
 //app.get("/products.json", async (req, res) => {
