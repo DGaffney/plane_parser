@@ -24,7 +24,8 @@ class SearchSubscription
 
   def send_subscription_email
     sss = SearchSubscription.all_by_one_id(self.id)
-    if (self.email_cadence == "daily" && self.last_sent_at.nil? || self.last_sent_at < Time.now-60*60*24) || (self.email_cadence == "weekly" && self.last_sent_at.nil? || self.last_sent_at < Time.now-60*60*24*7)
+    self.reload
+    if (self.email_cadence == "daily" && (self.last_sent_at.nil? || self.last_sent_at < Time.now-60*60*24)) || (self.email_cadence == "weekly" && (self.last_sent_at.nil? || self.last_sent_at < Time.now-60*60*24*7))
       ssis = SearchSubscriptionItem.where(sent_at: nil, :search_subscription_id.in =>  sss.collect(&:id))
       if ssis.count > 0
         Mailer.send_subscription_email(self, ssis)
