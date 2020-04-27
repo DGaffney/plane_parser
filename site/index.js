@@ -36,7 +36,7 @@ app.get("/parse_search_page.json", function(req, res) {
         var search_url = new URL(req.query.search_url)
         if (search_url.host != "trade-a-plane.com" && search_url.host != "www.trade-a-plane.com"){
           return res.json({error: "Error! This URL doesn't look like it's from Trade-A-Plane:"+req.query.search_url+". Please provide a Trade-A-Plane search results URL"})
-        } else if (search_url.pathname != "/search"){
+        } else if (search_url.pathname != "/search" && search_url.pathname != "/filtered/search"){
           return res.json({error: "Please provide a Trade-A-Plane search URL"})
         } else if (search_url.search.indexOf("s-type=aircraft") == -1){
           return res.json({error: "Please provide a Trade-A-Plane search URL for aircraft only - this search doesn't look to be for aircraft."})
