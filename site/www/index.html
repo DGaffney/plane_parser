@@ -117,8 +117,11 @@
                       <div class="card">
                         <div class="card-body">
                           <!-- INPUTS plan_H95MyTZaOIY9fv -->
-                        
-                          <input id="plan" type="hidden" value="plan_H9C2xO18zlLFak" name="plan"/>
+						  <select id="plan_selector" class="custom-select custom-select-lg mb-3" name="plan">
+							  <option selected="">Choose a Subscription Type</option>
+							  <option value="plan_H9C2xO18zlLFak">$1 / month ($12 / year)</option>
+							  <option value="plan_HAqpYIpJxeDoDC">$10 / year</option>
+						  </select>
                           <input id="customerName" name="customerName" type="text" class="form-control" placeholder="Name">
                           <br />
                           <input id="customerEmail" name="customerEmail" type="text" class="form-control" placeholder="Email">
@@ -288,6 +291,29 @@
         
         
         
+        function flipHowWorks(){
+            $("#how_works_button").collapse("hide")
+            $("#try_now_button").collapse("show")
+            $("#try_now_main").collapse("hide")
+            $("#how_works_main").collapse("show")
+            window.history.replaceState("", "TAP Deals", "/");
+        }
+        function flipTryNow(){
+            $("#try_now_button").collapse("hide")
+            $("#how_works_button").collapse("show")
+            $("#how_works_main").collapse("hide")
+            $("#try_now_main").collapse("show")
+        }
+        window.onload = function() {
+          urlParams = new URLSearchParams(window.location.search);
+          if (urlParams.get("search_url")){
+            flipTryNow()
+            $("#url").val(urlParams.get("search_url"))
+            validateSearch()
+          } else if (urlParams.get("try_now")) {
+            flipTryNow()
+          }
+        };
         /* Replace with Publishable Stripe Key */
         var stripe = Stripe('pk_test_jNs3EAozrEhu4yPSLdXrnQeZ');
 
@@ -443,29 +469,7 @@
             showState('success');
           }
         }
-        function flipHowWorks(){
-            $("#how_works_button").collapse("hide")
-            $("#try_now_button").collapse("show")
-            $("#try_now_main").collapse("hide")
-            $("#how_works_main").collapse("show")
-            window.history.replaceState("", "TAP Deals", "/");
-        }
-        function flipTryNow(){
-            $("#try_now_button").collapse("hide")
-            $("#how_works_button").collapse("show")
-            $("#how_works_main").collapse("hide")
-            $("#try_now_main").collapse("show")
-        }
-        window.onload = function() {
-          urlParams = new URLSearchParams(window.location.search);
-          if (urlParams.get("search_url")){
-            flipTryNow()
-            $("#url").val(urlParams.get("search_url"))
-            validateSearch()
-          } else if (urlParams.get("try_now")) {
-            flipTryNow()
-          }
-        };
+		
     </script>
     </div>
     <br />

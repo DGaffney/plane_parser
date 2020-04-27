@@ -39,6 +39,11 @@ module.exports = {
           return callback(body)
       })
   },
+  parse_search_page: function (search_url, callback) {
+    post("parse_search_page.json", {"search_url": search_url}, function(err, body){
+          return callback(body)
+      })
+  },
   get_current_subscriptions: function(id, callback) { 
 	  get("get_current_subscriptions.json?id="+id, function(err, body){
 		  return callback(body)
@@ -53,11 +58,6 @@ module.exports = {
 	  get("unsubscribe.json?id="+id, function(err, body){
 		  return callback(body)
 	  })
-  },
-  parse_search_page: function (search_url, callback) {
-    post("parse_search_page.json", {"search_url": search_url}, function(err, body){
-          return callback(body)
-      })
   },
   create_subscription: function (customerInfo, callback) {
     post("create_subscription.json", customerInfo, function(err, body){

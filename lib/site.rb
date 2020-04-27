@@ -1,20 +1,4 @@
 class Site < Sinatra::Base
-  post "/create_subscription.json" do
-    post_params = JSON.parse(request.body.read).symbolize_keys
-    subscription = SearchSubscription.new(
-      user_name: post_params[:name],
-      user_email: post_params[:email],
-      plan_id: post_params[:planId],
-      search_url: post_params[:searchUrl],
-      customer_id: post_params[:subscription]["customer"],
-      subscription_id: post_params[:subscription]["id"],
-      subscription_item_id: post_params[:subscription]["items"]["data"][0]["id"],
-      subscription_title: post_params[:subscription]["plan"]["nickname"]
-    )
-    subscription.save!
-    return subscription.to_json
-  end
-
   post "/parse_search_page.json" do
     body_params = JSON.parse(request.body.read)
     search_url = URI.parse(URI.decode(body_params["search_url"])) rescue nil
@@ -51,7 +35,23 @@ class Site < Sinatra::Base
     since_time ||= Time.now-60*60*24*7
     return {since_time: since_time, used_since_time_default: parse_error, listing_ids: RawPlane.where(:created_at.gte => since_time).distinct(:listing_id)}.to_json
   end
-  
+
+  post "/create_subscription.json" do
+    post_params = JSON.parse(request.body.read).symbolize_keys
+    subscription = SearchSubscription.new(
+      user_name: post_params[:name],
+      user_email: post_params[:email],
+      plan_id: post_params[:planId],
+      search_url: post_params[:searchUrl],
+      customer_id: post_params[:subscription]["customer"],
+      subscription_id: post_params[:subscription]["id"],
+      subscription_item_id: post_params[:subscription]["items"]["data"][0]["id"],
+      subscription_title: post_params[:subscription]["plan"]["nickname"]
+    )
+    subscription.save!
+    return subscription.to_json
+  end
+
   get "/search_subscriptions_by_id.json" do
     search_subscriptions = SearchSubscription.all_by_one_id(params[:id])
     if search_subscriptions

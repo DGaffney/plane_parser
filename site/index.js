@@ -31,23 +31,6 @@ f = require('util').format,
 http.listen(8080, function() {
 	console.log('listening on *:8080');
 });
-const trackImg = new Buffer('R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7', 'base64');
-
-app.get('/image/:email_id', (req, res) => {
-  if (req.headers.referer == null){
-      res.writeHead(200, {
-      'Content-Type': 'image/gif',
-      'Content-Length': trackImg.length
-    });
-    const email_id = req.params
-    config = req.query.config
-    api.track_open(email_id, config, function(body){
-        res.end(trackImg)
-    })
-  } else {
-      res.end(trackImg)
-  }
-})
 app.get("/parse_search_page.json", function(req, res) {
     try {
         var search_url = new URL(req.query.search_url)
