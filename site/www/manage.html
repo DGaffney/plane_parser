@@ -49,6 +49,7 @@
           <thead>
             <tr>
               <th scope="col">Search URL</th>
+              <th scope="col">Billing Cycle</th>
               <th scope="col">Last Search Result Sent At</th>
               <th scope="col">Unsubscribe Link</th>
             </tr>
@@ -89,7 +90,7 @@
             search_results_table = ""
             for (i = 0; i < subscriptions.subscriptions.length; i++) {
 			  sub = subscriptions.subscriptions[i]
-              search_results_table = search_results_table +  "<tr id='"+sub.id.$oid+"' class='collapse show'><td><em><a href='"+sub.search_url+"' target='_blank'>"+sub.search_url+"</a></em></td><td>"+sub.last_sent_at+"</td><td><a style='cursor:pointer;' class='secondary' onclick='unsubscribe(\""+sub.id.$oid+"\")'>Unsubscribe</a></td></tr>"
+              search_results_table = search_results_table +  "<tr id='"+sub.id.$oid+"' class='collapse show'><td><em><a href='"+sub.search_url+"' target='_blank'>"+sub.search_url+"</a></em></td><td>"+sub.billing_cadence+"</td><td>"+sub.last_sent_at+"</td><td><a style='cursor:pointer;' class='secondary' onclick='unsubscribe(\""+sub.id.$oid+"\")'>Unsubscribe</a></td></tr>"
             }
             $("#results_table").html(search_results_table)
 		}

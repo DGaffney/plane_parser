@@ -64,7 +64,7 @@ class Site < Sinatra::Base
 
   get "/get_current_subscriptions.json" do
     search_subscriptions = SearchSubscription.all_by_one_id(params[:id])
-    return {current_cadence: search_subscriptions.first.email_cadence, subscriptions: search_subscriptions.collect{|x| {id: x.id, search_url: x.search_url, last_sent_at: (x.last_sent_at.strftime("%Y-%m-%d") rescue "Never")}}}.to_json
+    return {current_cadence: search_subscriptions.first.email_cadence, subscriptions: search_subscriptions.collect{|x| {billing_cadence: x.plan_cadence.nil? ? "Monthly" : x.plan_cadence.capitalize+"ly", id: x.id, search_url: x.search_url, last_sent_at: (x.last_sent_at.strftime("%Y-%m-%d") rescue "Never")}}}.to_json
   end
 
   get "/set_subscription_cadence.json" do
