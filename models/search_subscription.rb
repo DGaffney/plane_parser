@@ -4,6 +4,7 @@ class SearchSubscription
   field :user_name
   field :user_email
   field :plan_id
+  field :plan_cadence
   field :search_url
   field :customer_id
   field :subscription_id

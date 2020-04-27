@@ -422,7 +422,7 @@
             body: JSON.stringify({
               email: document.getElementById('customerEmail').value,
               name: document.getElementById('customerName').value,
-              plan: document.getElementById('plan').value,
+              plan: $("#plan_selector").val(),
               search_url: search_url,
               paymentMethodId: paymentMethod.id,
             }),

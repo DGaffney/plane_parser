@@ -42,6 +42,7 @@ class Site < Sinatra::Base
       user_name: post_params[:name],
       user_email: post_params[:email],
       plan_id: post_params[:planId],
+      plan_cadence: post_params[:subscription]["plan"]["interval"],
       search_url: post_params[:searchUrl],
       customer_id: post_params[:subscription]["customer"],
       subscription_id: post_params[:subscription]["id"],
