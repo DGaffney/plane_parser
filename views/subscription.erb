@@ -28,6 +28,7 @@
 								<li style="font-family: Arial">Likelihood of similar aircraft in next 90 days: <%= item.content["predicted_stock"]["probability_of_stock_in_timeframe"].to_f.percent %></li>
 								<li style="font-family: Arial">Likelihood of cheaper similar aircraft in next 90 days: <%= (item.content["predicted_stock"]["probability_of_stock_in_timeframe"]*item.content["actual_percentile"].to_f).percent %></li>
 							</ul>
+							<br />
 					<% end %>
 				<% end %>
             </ul>
