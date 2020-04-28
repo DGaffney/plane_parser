@@ -4,6 +4,6 @@ class Float
   end
   
   def percent
-    (self*100).to_i.split(".")[0]+"%"
+    (self*100).to_i.to_s.split(".")[0]+"%"
   end
 end
