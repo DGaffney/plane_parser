@@ -37,6 +37,7 @@ class SubscriptionChecker
             content: item_content,
             item_type: "search_result",
           ).save!
+          print("!")
         end
       end
     end
