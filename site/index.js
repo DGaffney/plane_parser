@@ -66,6 +66,7 @@ app.post('/handle_payment.json', async (req, res) => {
 	      return res.json({ subscription });
 	    })
 	} catch(error) {
+		console.log(error)
 		return res.status(500).send({
 		   message: error.raw.message
 		});
