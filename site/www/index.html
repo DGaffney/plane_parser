@@ -5,7 +5,7 @@
       <!-- Global site tag (gtag.js) - Google Analytics -->
       <script async src="https://www.googletagmanager.com/gtag/js?id=UA-164240664-1"></script>
       <script>
-        var stripe = Stripe('pk_test_jNs3EAozrEhu4yPSLdXrnQeZ');
+        var stripe = Stripe('pk_live_MLztAKiDz9RriaWH7u1Nf7lS');
         var elements = stripe.elements();
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
@@ -214,6 +214,12 @@
         </div>
     </section>
     <script type="text/javascript">
+		function triggerView(viewPath, viewTitle){
+	  		gtag('config', 'UA-164240664-1', {
+			  'page_title' : viewTitle,
+			  'page_path': viewPath
+			});			
+		}
         function isRetinaDisplay() {
             if (window.matchMedia) {
                 var mq = window.matchMedia("only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (-o-min-device-pixel-ratio: 2.6/2), only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen  and (min-device-pixel-ratio: 1.3), only screen and (min-resolution: 1.3dppx)");
@@ -231,6 +237,7 @@
               $("#lookup_url").collapse("hide")
               $("#lookup_results").collapse("show")
               drawSearchConfirm(results)
+			  triggerView("/?search_url="+url, "Search URL")
               window.history.replaceState("", "TAP Deals", "/?search_url="+url);
             }
           })
@@ -265,6 +272,7 @@
             } else {
               $("#lookup_url").collapse("hide")
               $("#lookup_results").collapse("show")
+			  triggerView("/?search_url="+url, "Search URL")
               drawSearchConfirm(results)
               window.history.replaceState("", "TAP Deals", "/?search_url="+url);
             }
@@ -295,6 +303,7 @@
             $("#try_now_button").collapse("show")
             $("#try_now_main").collapse("hide")
             $("#how_works_main").collapse("show")
+			triggerView("/how_works", "How Works")
             window.history.replaceState("", "TAP Deals", "/");
         }
         function flipTryNow(){
@@ -302,6 +311,7 @@
             $("#how_works_button").collapse("show")
             $("#how_works_main").collapse("hide")
             $("#try_now_main").collapse("show")
+			triggerView("/try_now", "Try Now")
         }
         window.onload = function() {
           urlParams = new URLSearchParams(window.location.search);
