@@ -24,7 +24,6 @@ class Tweet
   end
 
   def self.generate_tweet(plane, text, tweet_type)
-    binding.pry
     return nil if plane.valuation_text.nil?
     t = Tweet.where(raw_plane_id: plane.id, tweet_type: tweet_type).first || Tweet.new(raw_plane_id: plane.id, tweet_type: tweet_type)
     return nil if t.tweet_sent
@@ -33,6 +32,7 @@ class Tweet
     t.send_tweet_at = Time.now+60*60*24
     t.save!
     SearchSubscription.active_daily.collect{|ss| ss.add_tweet_item(t)}
+    binding.pry
     SendTweet.perform_at(t.send_tweet_at, t.id)
     sleep(3)
   end
