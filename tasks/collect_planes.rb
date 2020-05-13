@@ -53,7 +53,7 @@ class CollectPlanes
       else
         plane = RawPlane.where(listing_id: aircraft[:listing_id]).first
         aircraft.each do |field, value|
-          plane.send((field.to_s+"=").to_sym, value) if plane.send(field).nil?
+          plane.send((field.to_s+"=").to_sym, value) if plane.send(field).nil? || plane.send(field) != value
         end
         plane.save!
       end
@@ -79,8 +79,8 @@ class CollectPlanes
       locality: (aircraft_listing.search("p.address span").select{|x| x["itemprop"] == "addresslocality"}.first.text rescue nil),
       full_address: aircraft_listing.search("p.address").collect(&:text).join(" ").strip.gsub("  ", " "),
       price: aircraft_page.search("p.price span").text.to_f,
-      make: aircraft_page.search("li.makeModel span span").text.strip,
-      model: aircraft_page.search("li.makeModel").text.gsub("Make/Model: ", "").gsub(aircraft_page.search(".makeModel span span").text, "").strip,
+      make: aircraft_page.search("li.makeModel span span").first.text.strip,
+      model: aircraft_page.search("li.makeModel").first.text.gsub("Make/Model: ", "").gsub(aircraft_page.search(".makeModel span span").first.text, "").strip,
       year: aircraft_page.search("div#main_info li")[1].text.gsub("Year: ", "").strip,
       reg_number: aircraft_page.search("div#main_info li")[3].text.gsub("Registration #: ", "").strip,
       serial_no: aircraft_page.search("div#main_info li")[4].text.gsub("Serial #: ", "").strip,
