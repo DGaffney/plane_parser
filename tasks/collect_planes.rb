@@ -47,9 +47,8 @@ class CollectPlanes
         rp.archived_link = `archiveis "#{aircraft_link}"`.strip
         rp.save!
         GenerateRawPlaneObservation.perform_async(rp.id)
-        (aircraft[:avionics_package]||[]).each do |avionic|
-          GenerateAvionicsMatchRecord.perform_async(avionic)
-        end
+        avionics = aircraft[:avionics_package]||[]
+        NewAvionicsMatchRecord.generate(avionics)
       else
         plane = RawPlane.where(listing_id: aircraft[:listing_id]).first
         aircraft.each do |field, value|
