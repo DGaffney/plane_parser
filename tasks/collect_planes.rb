@@ -40,6 +40,7 @@ class CollectPlanes
           retry
         end
       end
+      next if aircraft[:make].nil?
       aircraft[:avionics_package].first.split(", ").collect(&:strip).reject{|x| x.downcase.include?("avionics")}.collect{|x| x.split("(")[0]}.reject{|x| x.nil? || x.empty?} if aircraft[:avionics_package].length == 1
       if RawPlane.where(listing_id: aircraft[:listing_id]).first.nil?
         rp = RawPlane.new(aircraft)
@@ -78,12 +79,12 @@ class CollectPlanes
       locality: (aircraft_listing.search("p.address span").select{|x| x["itemprop"] == "addresslocality"}.first.text rescue nil),
       full_address: aircraft_listing.search("p.address").collect(&:text).join(" ").strip.gsub("  ", " "),
       price: aircraft_page.search("p.price span").text.to_f,
-      make: aircraft_page.search("li.makeModel span span").first.text.strip,
-      model: aircraft_page.search("li.makeModel").first.text.gsub("Make/Model: ", "").gsub(aircraft_page.search(".makeModel span span").first.text, "").strip,
-      year: aircraft_page.search("div#info-list-seller li")[1].text.gsub("Year: ", "").strip,
-      reg_number: aircraft_page.search("div#info-list-seller li")[3].text.gsub("Registration #: ", "").strip,
-      serial_no: aircraft_page.search("div#info-list-seller li")[4].text.gsub("Serial #: ", "").strip,
-      location: aircraft_page.search("div#info-list-seller li")[5].text.gsub("Location: ", "").gsub(/\W/, " ").gsub(/\ +/, " ").strip,
+      make: (aircraft_page.search("li.makeModel span span").first.text.strip rescue nil),
+      model: (aircraft_page.search("li.makeModel").first.text.gsub("Make/Model: ", "").gsub(aircraft_page.search(".makeModel span span").first.text, "").strip rescue nil),
+      year: (aircraft_page.search("div#info-list-seller li")[1].text.gsub("Year: ", "").strip rescue nil),
+      reg_number: (aircraft_page.search("div#info-list-seller li")[3].text.gsub("Registration #: ", "").strip rescue nil),
+      serial_no: (aircraft_page.search("div#info-list-seller li")[4].text.gsub("Serial #: ", "").strip rescue nil),
+      location: (aircraft_page.search("div#info-list-seller li")[5].text.gsub("Location: ", "").gsub(/\W/, " ").gsub(/\ +/, " ").strip rescue nil),
       avionics_package: aircraft_page.search("div#avionics_equipment pre").text.split(/[(\r\n)\n,.;]/).collect{|x| x.split(" - ")}.flatten.collect(&:strip).reject{|x| x.downcase.include?("avionics")}.collect{|x| x.split("(")[0]}.reject{|x| x.nil? || x.empty?},
       image_count: aircraft_page.search("div#photos li").count,
       header_image: aircraft_listing.search("img")[0].attributes["data-src"].value,
