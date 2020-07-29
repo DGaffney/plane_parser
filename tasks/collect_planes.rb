@@ -11,7 +11,7 @@ class CollectPlanes
   end
 
   def page_path
-    "/search?s-type=aircraft&s-advanced=yes&sale_status=For+Sale&user_distance=1000000&s-sort_key=days_since_update&s-sort_order=asc&s-page_size=48"
+    "/search?s-type=aircraft&s-advanced=yes&sale_status=For+Sale&user_distance=1000000&s-sort_key=days_since_update&s-sort_order=asc&s-page_size=400"
   end
 
   def perform
