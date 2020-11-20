@@ -190,6 +190,27 @@ class RawPlane
     })
   end
 
+  def future_outlook(days=90)
+    obs = RawPlane.where(:price.nin => [nil, 0.0], make: self.make, model: self.model, :year.gte => self.year-10, :year.lte => self.year+10, :created_at.gte => Time.now-60*60*24*365*2).order(:created_at.asc).to_a
+    if obs.to_a.length < 10
+      obs = self.similar_planes.select{|x| x.created_at > Time.now-60*60*24*365} 
+    end
+    low = obs.collect(&:price).percentile(0.15)
+    high = obs.collect(&:price).percentile(0.85)
+    x, y = obs.select{|r| r.price > low && r.price < high}.collect{|r| [(r.created_at-obs.first.created_at)/(60*60*24), r.price]}.transpose
+    lineFit = LineFit.new
+    return nil if x.nil? || x.to_a.length == 1
+    lineFit.setData(x,y)
+    intercept, slope = lineFit.coefficients
+  	residuals = lineFit.residuals
+    r2 = lineFit.rSquared
+    if r2 > 0.2 && x.to_a.length > 8
+      return {future_value: ((slope * days) / y.average).percent, days_out: days, future_error: (residuals.collect(&:abs).median / y.average).percent}
+    else
+      return {error: "No discernible trend - market is stable right now."}
+    end
+  end
+
   def self.distinct_values
     @@distinct_values ||= BSON::Document.new({
       category_level: RawPlane.distinct(:category_level),

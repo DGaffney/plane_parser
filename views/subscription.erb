@@ -27,6 +27,13 @@
 								</li>
 								<li style="font-family: Arial">Likelihood of similar aircraft in next 90 days: <%= item.content["predicted_stock"]["probability_of_stock_in_timeframe"].to_f.percent %></li>
 								<li style="font-family: Arial">Likelihood of cheaper similar aircraft in next 90 days: <%= (item.content["predicted_stock"]["probability_of_stock_in_timeframe"]*item.content["actual_percentile"].to_f).percent %></li>
+                <% if !item.content["future_trend"].nil> %>
+                  <% if item.content["future_trend"]["error"].nil?%>
+                    <li style="font-family: Arial"><b>NEW:</b> Predicted 90-day price trend for similar aircraft: <%= item.content["future_trend"]["future_value"].include?("-") ? "#{item.content["future_trend"]["future_value"]} decrease" : "#{item.content["future_trend"]["future_value"]} increase" %> ±<%= item.content["future_trend"]["future_error"] %></li>
+                  <% else %>
+                    <li style="font-family: Arial"><b>NEW:</b> Predicted 90-day price trend for similar aircraft: <%= item.content["future_trend"]["error"] %> ±<%= item.content["future_trend"]["error"] %></li>
+                  <% end %>
+                <% end %>
 							</ul>
 							<br />
 					<% end %>

@@ -30,7 +30,8 @@ class SubscriptionChecker
             predicted_price: pred_price,
             link: raw_plane.link,
             text: raw_plane.year_make_model_text,
-            price: raw_plane.price
+            price: raw_plane.price,
+            future_trend: raw_plane.future_outlook
           }
           SearchSubscriptionItem.new(
             raw_plane_id: raw_plane.id,
