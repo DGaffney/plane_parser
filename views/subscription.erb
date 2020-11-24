@@ -31,7 +31,7 @@
                   <% if item.content["future_trend"]["error"].nil?%>
                     <li style="font-family: Arial"><b>NEW:</b> Predicted 90-day price trend for similar aircraft: <%= item.content["future_trend"]["future_value"].include?("-") ? "#{item.content["future_trend"]["future_value"]} decrease" : "#{item.content["future_trend"]["future_value"]} increase" %> ±<%= item.content["future_trend"]["future_error"] %></li>
                   <% else %>
-                    <li style="font-family: Arial"><b>NEW:</b> Predicted 90-day price trend for similar aircraft: <%= item.content["future_trend"]["error"] %> ±<%= item.content["future_trend"]["error"] %></li>
+                    <li style="font-family: Arial"><b>NEW:</b> Predicted 90-day price trend for similar aircraft: <%= item.content["future_trend"]["error"] %></li>
                   <% end %>
                 <% end %>
 							</ul>
