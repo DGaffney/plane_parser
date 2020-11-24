@@ -17,6 +17,7 @@ require 'string-similarity'
 require 'dgaff'
 require 'diff/lcs'
 require 'jaro_winkler'
+require 'linefit'
 SETTINGS=JSON.parse(File.read("settings.json"))
 Mongoid.load!("mongoid.yml", :development)
 Stripe.api_key = SETTINGS["stripe_secret"]
