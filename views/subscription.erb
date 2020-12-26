@@ -4,7 +4,6 @@
     </head>
     <body style="margin:0">
         <div style="max-width:1000px;margin:0 auto">
-            <p style="margin:20px;font-family: Arial"><a style="color: #FFAF7B" href="https://forms.gle/qGS4Y2Y37jkTAFP76">Happy holidays from TAP Deals! As a thank you for being a subscriber, click here to sign up for our raffle for a $50 gift card from Sporty's - enter by Dec 25!</a></p>
             <p style="margin:20px;font-family: Arial">Hello! We have <%= @items.count %> update<%= @items.count == 1 ? "" : "s" %> for you from TAP Deals:</p>
             <ul style="margin-left:40px;line-height:1.5em">
 				<% @items.each do |item| %>
