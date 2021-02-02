@@ -15,7 +15,6 @@ class MarketDownload
         if !first
           parsed = Hash[keys.zip(row.strip.split(",").collect(&:strip))]
           match = hashed_makes[parsed["MFR MDL CODE"]]
-          binding.pry
           if match
             cleaned = {
               make: match["MFR"],
@@ -56,6 +55,7 @@ class MarketDownload
               rr = RegistrationRecord.where(unique_id: cleaned[:unique_id], last_action_date: cleaned[:last_action_date]).first_or_create
               rr.content = cleaned
               rr.save!
+            end
           end
         else
           first = false
