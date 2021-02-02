@@ -20,3 +20,6 @@ end
 task :check_subscriptions do
   SubscriptionChecker.check_subscriptions
 end
+task :market_download do
+  MarketEstimator.run
+end
